@@ -175,15 +175,22 @@ export default function Layout({ children }: { children: ReactNode }) {
             </nav>
             <div className="md:col-span-3">
               <ul className="space-y-2 text-sm">
-                {Object.values(site.links).map((l) => (
+                {(Object.keys(site.links) as (keyof typeof site.links)[]).map((key) => {
+                  const l = site.links[key];
+                  return (
                   <li key={l.label}>
                     {l.href ? (
-                      <a className="link-u" href={l.href} target="_blank" rel="noreferrer">{l.label} ↗</a>
+                      key === 'email' ? (
+                        <a className="link-u" href={`mailto:${l.href}`} aria-label={`Email ${l.href}`}>{l.label} ↗</a>
+                      ) : (
+                        <a className="link-u" href={l.href} target="_blank" rel="noopener noreferrer" aria-label={`${l.label} (opens in a new tab)`}>{l.label} ↗</a>
+                      )
                     ) : (
                       <span className="font-mono text-xs opacity-70">{l.placeholder}</span>
                     )}
                   </li>
-                ))}
+                  );
+                })}
               </ul>
             </div>
           </div>

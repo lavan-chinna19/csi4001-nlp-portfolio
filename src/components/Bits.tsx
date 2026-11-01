@@ -68,3 +68,38 @@ export function Reveal({ children, delay = 0, className = '' }: { children: Reac
 export function Kicker({ children, className = '' }: { children: ReactNode; className?: string }) {
   return <p className={`label ${className}`}>{children}</p>;
 }
+
+/**
+ * Renders an editable content field. When `value` is a PLACEHOLDER (empty string),
+ * shows a subtle dashed box ("Add your reflection here") instead of text.
+ */
+export function EditableText({
+  value,
+  hint = 'Add your reflection here',
+  className = '',
+  textClass = '',
+}: {
+  value: string;
+  hint?: string;
+  className?: string;
+  textClass?: string;
+}) {
+  if (value.trim()) {
+    return (
+      <div className={className}>
+        {value.split(/\n{2,}/).map((p, i) => (
+          <p key={i} className={`mb-3 last:mb-0 ${textClass}`}>{p}</p>
+        ))}
+      </div>
+    );
+  }
+  return (
+    <div
+      className={`flex min-h-[3.25rem] items-center gap-2.5 border border-dashed border-current px-4 py-3 font-mono text-[11px] uppercase tracking-[0.14em] opacity-45 ${className}`}
+      data-placeholder="true"
+    >
+      <span aria-hidden className="text-sm leading-none">+</span>
+      <span>{hint}</span>
+    </div>
+  );
+}
