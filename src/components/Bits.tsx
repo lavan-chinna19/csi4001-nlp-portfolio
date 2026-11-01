@@ -1,4 +1,4 @@
-import { type ReactNode, Fragment } from 'react';
+import type { ReactNode } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { site } from '../content/site';
 import type { Reflection as R } from '../content/types';
@@ -32,24 +32,6 @@ export function Reflection({ label, r, className = '', textClass = '' }: { label
   );
 }
 
-/** Renders text, styling any [bracketed placeholder] distinctly. */
-export function Ph({ text, className = '' }: { text: string; className?: string }) {
-  const parts = text.split(/(\[[^\]]+\])/g);
-  return (
-    <span className={className}>
-      {parts.map((p, i) =>
-        p.startsWith('[') && p.endsWith(']') ? (
-          <span key={i} className="mx-0.5 inline border border-dashed border-current px-1 font-mono text-[0.82em] leading-[1.9] opacity-75 [box-decoration-break:clone] [-webkit-box-decoration-break:clone]">
-            {p}
-          </span>
-        ) : (
-          <Fragment key={i}>{p}</Fragment>
-        )
-      )}
-    </span>
-  );
-}
-
 export function Reveal({ children, delay = 0, className = '' }: { children: ReactNode; delay?: number; className?: string }) {
   const reduce = useReducedMotion();
   return (
@@ -69,37 +51,29 @@ export function Kicker({ children, className = '' }: { children: ReactNode; clas
   return <p className={`label ${className}`}>{children}</p>;
 }
 
+/** True when an optional content field has real text. */
+export const hasText = (v: string | null | undefined): v is string => !!v && v.trim().length > 0;
+
 /**
- * Renders an editable content field. When `value` is a PLACEHOLDER (empty string),
- * shows a subtle dashed box ("Add your reflection here") instead of text.
+ * Renders an optional content field written by Lavan. Empty fields
+ * (`PLACEHOLDER`) render NOTHING — fill the field in src/content/ and it appears.
+ * Blank lines split the text into paragraphs.
  */
 export function EditableText({
   value,
-  hint = 'Add your reflection here',
   className = '',
   textClass = '',
 }: {
   value: string;
-  hint?: string;
   className?: string;
   textClass?: string;
 }) {
-  if (value.trim()) {
-    return (
-      <div className={className}>
-        {value.split(/\n{2,}/).map((p, i) => (
-          <p key={i} className={`mb-3 last:mb-0 ${textClass}`}>{p}</p>
-        ))}
-      </div>
-    );
-  }
+  if (!hasText(value)) return null;
   return (
-    <div
-      className={`flex min-h-[3.25rem] items-center gap-2.5 border border-dashed border-current px-4 py-3 font-mono text-[11px] uppercase tracking-[0.14em] opacity-45 ${className}`}
-      data-placeholder="true"
-    >
-      <span aria-hidden className="text-sm leading-none">+</span>
-      <span>{hint}</span>
+    <div className={className}>
+      {value.split(/\n{2,}/).map((p, i) => (
+        <p key={i} className={`mb-3 last:mb-0 ${textClass}`}>{p}</p>
+      ))}
     </div>
   );
 }

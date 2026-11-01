@@ -1,7 +1,19 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 
-export default function NextChapter({ to, num, label, dark = false }: { to: string; num: string; label: string; dark?: boolean }) {
+export default function NextChapter({
+  to,
+  num,
+  label,
+  dark = false,
+  kicker = 'Next chapter',
+}: {
+  to: string;
+  num: string;
+  label: string;
+  dark?: boolean;
+  kicker?: string;
+}) {
   return (
     <Link
       to={to}
@@ -9,7 +21,7 @@ export default function NextChapter({ to, num, label, dark = false }: { to: stri
     >
       <div className="page-x flex items-end justify-between gap-6 py-14">
         <div>
-          <p className={`label ${dark ? 'text-lime' : 'text-sage-deep'}`}>Next chapter · {num}</p>
+          <p className={`label ${dark ? 'text-lime' : 'text-sage-deep'}`}>{kicker} · {num}</p>
           <p className="mt-2 font-serif leading-none" style={{ fontSize: 'clamp(2.5rem, 7vw, 6rem)' }}>
             {label}
           </p>

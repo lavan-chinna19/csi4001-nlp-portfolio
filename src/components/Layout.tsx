@@ -81,7 +81,7 @@ export default function Layout({ children }: { children: ReactNode }) {
             <span className={`label hidden sm:inline ${dark ? 'text-ink-mute' : 'text-sage-deep'}`}>{site.course.code}</span>
           </Link>
           <nav aria-label="Primary" className="hidden xl:block">
-            <ul className="flex items-center gap-5 xl:gap-7">
+            <ul className="flex items-center gap-5 2xl:gap-7">
               {nav.map((n) => (
                 <li key={n.to}>
                   <NavLink
@@ -177,18 +177,15 @@ export default function Layout({ children }: { children: ReactNode }) {
               <ul className="space-y-2 text-sm">
                 {(Object.keys(site.links) as (keyof typeof site.links)[]).map((key) => {
                   const l = site.links[key];
+                  if (!l.href) return null;
                   return (
-                  <li key={l.label}>
-                    {l.href ? (
-                      key === 'email' ? (
+                    <li key={l.label}>
+                      {key === 'email' ? (
                         <a className="link-u" href={`mailto:${l.href}`} aria-label={`Email ${l.href}`}>{l.label} ↗</a>
                       ) : (
                         <a className="link-u" href={l.href} target="_blank" rel="noopener noreferrer" aria-label={`${l.label} (opens in a new tab)`}>{l.label} ↗</a>
-                      )
-                    ) : (
-                      <span className="font-mono text-xs opacity-70">{l.placeholder}</span>
-                    )}
-                  </li>
+                      )}
+                    </li>
                   );
                 })}
               </ul>

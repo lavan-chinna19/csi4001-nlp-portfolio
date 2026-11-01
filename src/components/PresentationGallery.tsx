@@ -1,8 +1,19 @@
 import { useCallback, useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { ChevronLeft, ChevronRight, ImagePlus, Maximize2, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Maximize2, X } from 'lucide-react';
 import type { ImageSlot } from '../content/types';
+
+/** Any image the gallery can show. Width/height are optional (default 4:3). */
+export interface GalleryImage {
+  src: string;
+  alt: string;
+  caption: string;
+  width?: number;
+  height?: number;
+}
+
+const dims = (img: GalleryImage) => ({ width: img.width ?? 800, height: img.height ?? 600 });
 
 /** Accessible lightbox: Esc closes, Tab is trapped, focus returns to the opener. */
 function Lightbox({
@@ -11,7 +22,7 @@ function Lightbox({
   onClose,
   onIndex,
 }: {
-  images: ImageSlot[];
+  images: GalleryImage[];
   index: number;
   onClose: () => void;
   onIndex: (i: number) => void;
@@ -84,13 +95,13 @@ function Lightbox({
           key={img.src}
           src={img.src}
           alt={img.alt}
-          width={img.width}
-          height={img.height}
+          width={dims(img).width}
+          height={dims(img).height}
           initial={reduce ? false : { opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.25 }}
           className="max-h-[78vh] w-auto max-w-full border border-ivory/15 object-contain"
-          style={{ aspectRatio: `${img.width} / ${img.height}` }}
+          style={{ aspectRatio: `${dims(img).width} / ${dims(img).height}` }}
         />
         <figcaption className="mt-4 flex w-full flex-wrap items-center justify-between gap-3 font-mono text-xs text-ivory/75">
           <span>
@@ -114,8 +125,20 @@ function Lightbox({
   );
 }
 
-/** Two-up gallery of presentation photos with click-to-enlarge. */
-export function PresentationGallery({ images }: { images: ImageSlot[] }) {
+/**
+ * Gallery with click-to-enlarge lightbox.
+ * `plate` (default): two-up figures with captions. `thumbs`: compact thumbnail row.
+ * Renders nothing when `images` is empty.
+ */
+export function PresentationGallery({
+  images,
+  variant = 'plate',
+  className = '',
+}: {
+  images: GalleryImage[];
+  variant?: 'plate' | 'thumbs';
+  className?: string;
+}) {
   const [open, setOpen] = useState<number | null>(null);
   const openers = useRef<(HTMLButtonElement | null)[]>([]);
   const lastOpened = useRef<number>(0);
@@ -125,46 +148,56 @@ export function PresentationGallery({ images }: { images: ImageSlot[] }) {
     window.setTimeout(() => openers.current[lastOpened.current]?.focus(), 0);
   }, []);
 
+  if (!images.length) return null;
+  const thumbs = variant === 'thumbs';
+
   return (
     <>
-      <ul className="grid gap-6 md:grid-cols-2">
-        {images.map((img, i) => (
-          <li key={img.src}>
-            <figure>
-              <button
-                ref={(el) => {
-                  openers.current[i] = el;
-                }}
-                type="button"
-                onClick={() => {
-                  lastOpened.current = i;
-                  setOpen(i);
-                }}
-                aria-label={`Enlarge image: ${img.caption}`}
-                className="group relative block w-full overflow-hidden border border-ivory/15 bg-ink-soft"
-                style={{ aspectRatio: `${img.width} / ${img.height}` }}
-              >
-                <img
-                  src={img.src}
-                  alt={img.alt}
-                  width={img.width}
-                  height={img.height}
-                  loading="lazy"
-                  decoding="async"
-                  className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-                />
-                <span aria-hidden className="pointer-events-none absolute inset-0 bg-ink/0 transition-colors duration-300 group-hover:bg-ink/15" />
-                <span aria-hidden className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 border border-ivory/30 bg-ink/80 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-ivory opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
-                  <Maximize2 size={12} /> Enlarge
-                </span>
-              </button>
-              <figcaption className="mt-3 flex items-baseline gap-3 font-mono text-xs text-ivory/70">
-                <span className="text-lime">Fig. {String(i + 1).padStart(2, '0')}</span>
-                <span>{img.caption}</span>
-              </figcaption>
-            </figure>
-          </li>
-        ))}
+      <ul className={`${thumbs ? 'flex flex-wrap gap-2' : 'grid gap-6 md:grid-cols-2'} ${className}`}>
+        {images.map((img, i) => {
+          const d = dims(img);
+          return (
+            <li key={img.src} className={thumbs ? 'w-24 sm:w-28' : ''}>
+              <figure>
+                <button
+                  ref={(el) => {
+                    openers.current[i] = el;
+                  }}
+                  type="button"
+                  onClick={() => {
+                    lastOpened.current = i;
+                    setOpen(i);
+                  }}
+                  aria-label={`Enlarge image: ${img.caption}`}
+                  className="group relative block w-full overflow-hidden border border-ivory/15 bg-ink-soft"
+                  style={{ aspectRatio: thumbs ? '4 / 3' : `${d.width} / ${d.height}` }}
+                >
+                  <img
+                    src={img.src}
+                    alt={img.alt}
+                    width={d.width}
+                    height={d.height}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                  />
+                  <span aria-hidden className="pointer-events-none absolute inset-0 bg-ink/0 transition-colors duration-300 group-hover:bg-ink/15" />
+                  {!thumbs && (
+                    <span aria-hidden className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 border border-ivory/30 bg-ink/80 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-ivory opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
+                      <Maximize2 size={12} /> Enlarge
+                    </span>
+                  )}
+                </button>
+                {!thumbs && (
+                  <figcaption className="mt-3 flex items-baseline gap-3 font-mono text-xs text-ivory/70">
+                    <span className="text-lime">Fig. {String(i + 1).padStart(2, '0')}</span>
+                    <span>{img.caption}</span>
+                  </figcaption>
+                )}
+              </figure>
+            </li>
+          );
+        })}
       </ul>
       <AnimatePresence>
         {open !== null && <Lightbox images={images} index={open} onClose={close} onIndex={setOpen} />}
@@ -173,31 +206,21 @@ export function PresentationGallery({ images }: { images: ImageSlot[] }) {
   );
 }
 
-/** An image slot: renders the image if set, otherwise a tasteful "Add … image" placeholder. */
-export function ImageSlotView({ image, label, hint }: { image: ImageSlot | null; label: string; hint: string }) {
-  if (image) {
-    return (
-      <figure>
-        <img
-          src={image.src}
-          alt={image.alt}
-          width={image.width}
-          height={image.height}
-          loading="lazy"
-          className="w-full border border-ivory/15"
-          style={{ aspectRatio: `${image.width} / ${image.height}` }}
-        />
-        <figcaption className="mt-3 font-mono text-xs text-ivory/70">{image.caption}</figcaption>
-      </figure>
-    );
-  }
+/** An optional image slot: renders the image when set, and nothing at all while it is `null`. */
+export function ImageSlotView({ image }: { image: ImageSlot | null }) {
+  if (!image) return null;
   return (
-    <div className="grid min-h-[11rem] place-items-center border border-dashed border-ivory/25 bg-ink-soft/40 p-6 text-center" data-placeholder="true">
-      <div>
-        <ImagePlus className="mx-auto mb-3 text-ink-mute" size={22} aria-hidden />
-        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-ivory/60">{label}</p>
-        <p className="mt-2 font-mono text-[10px] text-ink-mute">{hint}</p>
-      </div>
-    </div>
+    <figure>
+      <img
+        src={image.src}
+        alt={image.alt}
+        width={image.width}
+        height={image.height}
+        loading="lazy"
+        className="w-full border border-ivory/15"
+        style={{ aspectRatio: `${image.width} / ${image.height}` }}
+      />
+      <figcaption className="mt-3 font-mono text-xs text-ivory/70">{image.caption}</figcaption>
+    </figure>
   );
 }
