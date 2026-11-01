@@ -1,19 +1,18 @@
 /**
  * About page content.
- * The prose below is written ONLY from facts Lavan confirmed on 2026-11-01.
+ * The prose below is written ONLY from facts Lavan confirmed on 2026-11-01,
+ * and the How I Learn directions he gave for Version 3.
  *
- * EDITABLE FIELDS: anything set to `PLACEHOLDER` (search for `TODO(lavan)`)
- * renders as a dashed "Add your reflection here" box. Replace `PLACEHOLDER`
- * with your own words — the box disappears automatically.
+ * Any block whose `body` is empty is not rendered — no placeholder box.
+ * Contact details appear once in the fact sheet and once in the site footer.
  */
-import { PLACEHOLDER, type Editable } from './types';
+import type { Editable } from './types';
 
 export interface AboutSection {
   id: string;
   kicker: string;
   title: string;
   body: string[];
-  placeholder: boolean;
   chips?: string[];
 }
 
@@ -21,6 +20,14 @@ export interface EditableBlock {
   id: string;
   title: string;
   body: Editable;
+}
+
+/** One interest area in the Future Aspirations constellation. */
+export interface InterestArea {
+  id: string;
+  label: string;
+  /** A neutral one-line description of the field (not a claim about Lavan). */
+  note: string;
 }
 
 export const about = {
@@ -51,7 +58,6 @@ export const about = {
       body: [
         'I’m Lavan Kumar, a Data Science student at VIT Vellore, originally from Medak in Telangana. This portfolio is my record of CSI4001 — Natural Language Processing and Computational Linguistics.',
       ],
-      placeholder: false,
     },
     {
       id: 'academic',
@@ -61,7 +67,6 @@ export const about = {
         'I study Data Science. Along the way I have worked on Python-based AI and machine learning projects, and I am interested in AI, machine learning, deep learning, NLP and generative AI.',
         'What keeps me going is wanting to understand how intelligent systems actually work — and using technology to solve practical problems.',
       ],
-      placeholder: false,
     },
     {
       id: 'technical-interests',
@@ -69,7 +74,6 @@ export const about = {
       title: 'Technical interests',
       body: ['The areas I am most drawn to:'],
       chips: ['Natural Language Processing', 'Machine Learning', 'Deep Learning', 'Computer Vision', 'Generative AI', 'Data Science'],
-      placeholder: false,
     },
     {
       id: 'skills',
@@ -77,37 +81,64 @@ export const about = {
       title: 'Skills & tools',
       body: ['The languages and tools I work with:'],
       chips: ['Python', 'Java', 'SQL', 'TensorFlow', 'PyTorch', 'Streamlit', 'Power BI', 'Tableau', 'GitHub'],
-      placeholder: false,
     },
   ] satisfies AboutSection[],
 
-  /** IV. How I learn — five headed sub-sections. */
+  /** IV. How I learn — five headed sub-sections (Version 3 text, from Lavan's directions). */
   howILearn: {
     id: 'how-i-learn',
     kicker: 'IV.',
     title: 'How I learn',
     blocks: [
-      // TODO(lavan): write each body in your own words.
-      { id: 'fundamentals', title: 'Understanding the Fundamentals', body: PLACEHOLDER },
-      { id: 'implementation', title: 'Learning Through Implementation', body: PLACEHOLDER },
-      { id: 'experimenting', title: 'Experimenting with Different Approaches', body: PLACEHOLDER },
-      { id: 'mistakes', title: 'Learning from Mistakes', body: PLACEHOLDER },
-      { id: 'real-world', title: 'Exploring Real-World Applications', body: PLACEHOLDER },
+      {
+        id: 'fundamentals',
+        title: 'Understanding the Fundamentals',
+        body: 'Before I implement something, I try to understand the idea underneath it — what problem it solves and why it works. Once the concept is clear, the code is easier to write, and much easier to reason about when something goes wrong.',
+      },
+      {
+        id: 'implementation',
+        title: 'Learning Through Implementation',
+        body: 'A concept only really makes sense to me once I have applied it. I explore ideas by putting them into practical projects and small experiments. LexAudit, the team NLP project I worked on for CSI4001, is one example of this kind of hands-on work.',
+      },
+      {
+        id: 'comparing',
+        title: 'Comparing Different Approaches',
+        body: 'There is rarely only one way to solve a problem. I like to look at alternative techniques, models and methods side by side, to understand where each one works well and where it falls short.',
+      },
+      {
+        id: 'debugging',
+        title: 'Learning Through Debugging',
+        body: 'When an implementation does not behave the way I expect, I treat that as part of the learning. I investigate the problem, track down where the error comes from, and improve the solution through experimentation.',
+      },
+      {
+        id: 'theory-applications',
+        title: 'Connecting Theory with Applications',
+        body: 'I am interested in how academic concepts turn into real-world applications. Seeing an idea from the classroom become part of a useful system helps me understand both the theory and why it matters.',
+      },
     ] satisfies EditableBlock[],
   },
 
-  /** V. Future aspirations — five fields. */
+  /**
+   * V. Future aspirations — one concise section.
+   * Phrased as directions Lavan wants to keep exploring, NOT as confirmed career
+   * goals or plans. TODO(lavan): edit `intro` / `closing` in your own words if you like.
+   */
   aspirations: {
     id: 'aspirations',
     kicker: 'V.',
     title: 'Future aspirations',
-    fields: [
-      // TODO(lavan): write each body in your own words.
-      { id: 'explore', title: 'Areas I Want to Explore', body: PLACEHOLDER },
-      { id: 'skills', title: 'Technical Skills I Want to Develop', body: PLACEHOLDER },
-      { id: 'career', title: 'My Long-Term Career Goals', body: PLACEHOLDER },
-      { id: 'problems', title: 'Problems I Want to Solve', body: PLACEHOLDER },
-      { id: 'build-next', title: 'What I Want to Build Next', body: PLACEHOLDER },
-    ] satisfies EditableBlock[],
+    intro:
+      'Rather than a fixed plan, these are the directions I want to keep exploring. What connects them is the question that draws me to this field: how intelligent systems actually work — and how they can be used to solve practical problems.',
+    centre: 'How intelligent systems work',
+    centreSub: 'and how they solve practical problems',
+    areas: [
+      { id: 'ai', label: 'Artificial Intelligence', note: 'systems that reason, decide and act' },
+      { id: 'ml', label: 'Machine Learning', note: 'learning patterns from data' },
+      { id: 'dl', label: 'Deep Learning', note: 'neural networks that learn representations' },
+      { id: 'nlp', label: 'Natural Language Processing', note: 'machines working with human language' },
+      { id: 'genai', label: 'Generative AI', note: 'models that produce new text and media' },
+      { id: 'ds', label: 'Data Science', note: 'turning data into understanding' },
+    ] satisfies InterestArea[],
+    closing: 'These are interests I want to keep exploring — not finished achievements.',
   },
 };

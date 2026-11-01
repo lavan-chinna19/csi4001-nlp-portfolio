@@ -101,7 +101,7 @@ export const syllabus: Module[] = [
         technical:
           'Rule-based tokenizers use regular expressions for punctuation, clitics ("don\'t" → "do" + "n\'t" in Penn style) and abbreviations. Sentence segmentation must handle periods in "Dr." or "3.5". Subword tokenizers (BPE, WordPiece, SentencePiece) learn a vocabulary of frequent fragments so rare words become sequences of known pieces, avoiding out-of-vocabulary tokens.',
         example: '"unbelievable" might become ["un", "believ", "able"] in a subword vocabulary, so a model can still represent it even if it never saw the whole word.',
-        whatSurprisedMe: draft('That the very first step of the pipeline already involves this many choices.'),
+        whatSurprisedMe: draft('That the very first step of the pipeline already involves several design choices.'),
         whereUsed: 'The first step of almost every NLP system, including every transformer model’s input.',
         demo: 'tokenizer',
       },
@@ -127,7 +127,7 @@ export const syllabus: Module[] = [
         technical:
           'D[i][j] = min(D[i-1][j] + 1 (deletion), D[i][j-1] + 1 (insertion), D[i-1][j-1] + (0 if a_i = b_j else sub_cost)). With sub_cost = 1 it is Levenshtein distance; some textbooks use sub_cost = 2. Complexity O(nm); backtracing through the table gives an alignment.',
         example: '"intention" → "execution" has Levenshtein distance 5.',
-        whatSurprisedMe: draft('How a small table makes a problem with huge numbers of possible edit sequences easy.'),
+        whatSurprisedMe: draft('That a small table replaces checking a huge number of possible edit sequences.'),
         whereUsed: 'Spelling correction, fuzzy search, DNA sequence alignment, evaluating speech recognition (word error rate).',
         demo: 'editDistance',
       },
@@ -279,7 +279,7 @@ export const syllabus: Module[] = [
         technical:
           'Simplified Lesk: for each sense s of the target word, score = |context words ∩ (gloss(s) ∪ examples(s))| (excluding stopwords), and choose argmax. Supervised WSD trains classifiers on sense-tagged corpora (e.g. SemCor); modern systems use contextual embeddings and nearest sense embeddings.',
         example: 'In "deposit money in the bank", "money" and "deposit" overlap the financial sense’s gloss, not the river sense.',
-        whatSurprisedMe: draft('That a simple overlap count works reasonably often.'),
+        whatSurprisedMe: draft('That counting shared words between a definition and the context is often enough to pick the right sense.'),
         whereUsed: 'Machine translation, information retrieval, lexical simplification.',
       },
     ],

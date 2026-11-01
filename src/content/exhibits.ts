@@ -72,7 +72,7 @@ export const exhibits: Exhibit[] = [
     whatItDoes:
       'An open-source transformer-based multilingual neural machine translation model covering all 22 scheduled Indian languages, released with its training data (BPCC), back-translation data and the IN22 benchmark.',
     whatCaughtMyAttention: draft('That it covers all 22 scheduled languages, including ones with very little digital text.'),
-    whyILikedIt: draft('It is a real answer to the low-resource language problem discussed in the Contemporary Issues module, built for Indian languages.'),
+    whyILikedIt: draft('It tackles the low-resource language problem from the Contemporary Issues module, specifically for Indian languages.'),
     whatMakesItDifferent:
       'It adopts script unification where feasible so related languages can share vocabulary and transfer learning, and it releases the datasets and evaluation benchmarks, not only the model.',
     whatILearned: draft('Data collection and open benchmarks are as much a part of the work as the model architecture.'),
@@ -97,7 +97,7 @@ export const exhibits: Exhibit[] = [
     whatItDoes:
       'A general-purpose speech recognition model trained on a large, diverse audio dataset. One model performs multilingual speech recognition, speech translation and language identification.',
     whatCaughtMyAttention: draft('One model replaces several stages of a traditional speech pipeline.'),
-    whyILikedIt: draft('The trick of describing the task with special tokens is simple and elegant.'),
+    whyILikedIt: draft('The task is chosen by a few special tokens at the start of the output — nothing else changes.'),
     whatMakesItDifferent:
       'Tasks are represented as sequences of tokens predicted by the decoder. Special tokens act as task specifiers (transcribe vs. translate, language, timestamps), so one sequence-to-sequence transformer handles many tasks.',
     whatILearned: draft('A language model decoder can be steered to different tasks just by what you put at the start of its output.'),
@@ -150,7 +150,7 @@ export const exhibits: Exhibit[] = [
     whyILikedIt: draft('It links retrieval to the hallucination problem: better retrieval gives generators better grounding.'),
     whatMakesItDifferent:
       '"Late interaction": passages are pre-encoded into a matrix of token-level embeddings; at search time each query token finds its most similar passage token (MaxSim) and those scores are summed. This is richer than single-vector similarity but still scales.',
-    whatILearned: draft('There is a trade-off between interaction richness and speed, and late interaction sits in a clever middle.'),
+    whatILearned: draft('Retrieval trades interaction detail against speed, and late interaction sits between the two extremes.'),
     nlp: {
       representation: 'Matrices of contextual token embeddings for queries and passages.',
       technique: 'BERT-based encoders with MaxSim late interaction and vector-similarity search.',
@@ -197,7 +197,7 @@ export const exhibits: Exhibit[] = [
     whatItDoes:
       'Pre-training with Extracted Gap-sentences for Abstractive SUmmarization: a transformer encoder–decoder pre-trained with a self-supervised objective designed to resemble summarization (ICML 2020).',
     whatCaughtMyAttention: draft('The pre-training task itself looks like summarization.'),
-    whyILikedIt: draft('It contrasts nicely with the extractive summarizer I studied: here important sentences are hidden and regenerated rather than selected.'),
+    whyILikedIt: draft('It is the opposite of the extractive summarizer from the course: important sentences are hidden and regenerated, not selected.'),
     whatMakesItDifferent:
       'Gap Sentences Generation (GSG): whole important sentences are removed from a document and the model must generate them from the rest — closer to summarization than masking random words.',
     whatILearned: draft('Choosing a pre-training objective close to the downstream task can make fine-tuning more effective.'),
@@ -208,7 +208,7 @@ export const exhibits: Exhibit[] = [
       output: 'An abstractive summary generated token by token.',
       problem: 'Condensing news articles and other long documents.',
     },
-    takeaway: draft('Design the practice task to look like the real task.'),
+    takeaway: draft('Make the pre-training task look like the task you actually care about.'),
     concepts: ['generation', 'attention', 'lm', 'seqmodel'],
   },
   {

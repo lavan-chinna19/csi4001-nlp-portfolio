@@ -9,9 +9,8 @@ export const site = {
   subtitle: 'An Exploration of Natural Language Processing and Computational Linguistics.',
   name: 'Lavan Kumar',
   registrationNumber: '23MID0108',
-  /** Cover tagline (confirmed). Set to null to show a placeholder instead. */
+  /** Cover tagline (confirmed). Set to null to hide it. */
   tagline: 'A personal exploration of language, machines and meaning.' as string | null,
-  taglinePlaceholder: '[Add a one-line tagline in your own voice]',
   course: {
     code: 'CSI4001',
     title: 'Natural Language Processing and Computational Linguistics',
@@ -30,10 +29,10 @@ export const site = {
 
   links: {
     // Edit the addresses in about.ts → contact.
-    github: { label: 'GitHub', href: about.contact.github, placeholder: '[Add GitHub URL]' },
-    linkedin: { label: 'LinkedIn', href: about.contact.linkedin, placeholder: '[Add LinkedIn URL]' },
+    github: { label: 'GitHub', href: about.contact.github },
+    linkedin: { label: 'LinkedIn', href: about.contact.linkedin },
     /** Plain address — `mailto:` is added where it is rendered. */
-    email: { label: 'Email', href: about.contact.email, placeholder: '[Add email address]' },
+    email: { label: 'Email', href: about.contact.email },
   } satisfies Record<string, MaybeLink>,
 };
 
@@ -43,6 +42,7 @@ export const nav = [
   { to: '/project', label: 'My Project', num: '02' },
   { to: '/learning', label: 'My Learning', num: '03' },
   { to: '/exhibits', label: 'Projects That Made Me Think', num: '04' },
+  { to: '/contributions', label: 'Classroom Contributions', num: '05' },
 ] as const;
 
 /** Per-route document titles + descriptions (applied by usePageMeta). */
@@ -66,5 +66,9 @@ export const pageMeta: Record<string, { title: string; description: string }> = 
   '/exhibits': {
     title: 'Projects That Made Me Think — Beyond Words',
     description: 'A gallery of nine real open-source NLP projects and a connection map to the concepts behind them.',
+  },
+  '/contributions': {
+    title: 'Classroom Contributions: Beyond the Classroom — Beyond Words',
+    description: 'A record of the stars and recognition received in CSI4001 NLP classes for participation, answering questions, presentations and other contributions.',
   },
 };

@@ -18,18 +18,17 @@ export interface Reflection {
 /** Helper so drafts are short to write in content files. */
 export const draft = (text: string): Reflection => ({ text, status: 'draft' });
 
-/** A link that may still be missing. `href: null` renders a visible placeholder. */
+/** A link that may still be missing. `href: null` hides it everywhere. */
 export interface MaybeLink {
   label: string;
   href: string | null;
-  placeholder: string;
 }
 
 /**
- * PLACEHOLDER — an editable field Lavan has not written yet.
- * Any content field set to `PLACEHOLDER` (an empty string) renders as a subtle
- * dashed "Add your … here" box instead of text. To fill one, replace
- * `PLACEHOLDER` with your own words. Search the content files for
+ * PLACEHOLDER — an optional field Lavan has not written yet.
+ * Any content field set to `PLACEHOLDER` (an empty string) is simply NOT
+ * rendered — no box, no hint. To show one, replace `PLACEHOLDER` with your own
+ * words and it appears automatically. Search the content files for
  * `TODO(lavan)` to find every one.
  */
 export const PLACEHOLDER = '';
@@ -37,7 +36,7 @@ export const PLACEHOLDER = '';
 /** A string field that may still be a PLACEHOLDER (empty). */
 export type Editable = string;
 
-/** An image slot that may still be empty (`null` renders an "Add image" placeholder). */
+/** An image (a slot typed `ImageSlot | null` renders nothing while `null`). */
 export interface ImageSlot {
   src: string;
   alt: string;

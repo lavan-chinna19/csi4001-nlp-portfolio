@@ -12,9 +12,9 @@
  * docs/FINAL_SOURCE_PARSING_AND_RESEARCH_FREEZE.md, docs/PERSONAL_MAIN_RELEASE_2026_11_01.md,
  * demo_ready/FINAL_DEMO_README.md, and source under src/ (cited per item).
  *
- * EDITABLE FIELDS: anything set to `PLACEHOLDER` (search for `TODO(lavan)`)
- * renders as a dashed "Add …" box. Replace `PLACEHOLDER` with your own words.
- * Image slots set to `null` render an "Add image" box.
+ * OPTIONAL FIELDS: anything set to `PLACEHOLDER` (search for `TODO(lavan)`)
+ * is NOT rendered. Replace `PLACEHOLDER` with your own words and it appears.
+ * Image slots set to `null` render nothing until you add an image.
  */
 import { PLACEHOLDER, type Editable, type ImageSlot } from './types';
 
@@ -80,16 +80,62 @@ export const project = {
   /** Factual short summary (from README.md "Features"). */
   summary:
     'A local legal-NLP research application. It reads a contract clause by clause and flags out-of-place clauses, broken cross-references and conflicting dates. Each flag carries a severity, an explanation and, where it can, a suggested position.',
-  // TODO(lavan): full project description in your own words.
+  /** "At a glance" rows for §01 — each restates facts documented further down the page. */
+  glance: [
+    { k: 'Input', v: 'A contract as TXT, PDF (text-based) or DOCX.' },
+    { k: 'Analysis', v: 'Frozen Legal-BERT clause embeddings, two scoring channels, and reference and date rules — on a local CPU.' },
+    { k: 'Output', v: 'Flags with a severity, an explanation and, where possible, a suggested position; PDF and DOCX reports.' },
+    { k: 'Positioning', v: 'Research decision support for a human reviewer — not legal advice.' },
+  ],
+  // TODO(lavan): optional — full project description in your own words. Shown only when filled.
   fullDescription: PLACEHOLDER as Editable,
 
   /* ───────────────────────── 02 · Motivation ───────────────────────── */
-  // TODO(lavan): why did the team build LexAudit?
+  /**
+   * Repository-grounded framing (always shown, attributed to the repo).
+   * It states what the system is FOR — not why the team personally chose it.
+   */
+  motivationFromRepo: {
+    statement:
+      'LexAudit is built to check a contract’s internal structure, clause by clause: whether each clause sits where it belongs, whether cross-references point to real sections, and whether dates contradict each other.',
+    points: [
+      'Primary intended use: academic and research evaluation of contract structure, clause-order anomalies, missing standard terms and dangling internal references.',
+      'Outputs are research decision support for a human reviewer — not legal advice and not a replacement for licensed attorney review.',
+    ],
+    source: 'docs/system_card.md · README',
+  },
+  // TODO(lavan): optional — why the team built LexAudit, in your own words. Shown only when filled.
   motivation: PLACEHOLDER as Editable,
 
   /* ─────────────── 03 · Existing gap / event that motivated it ─────────────── */
+  /**
+   * Repository-grounded framing of the gap (always shown, attributed).
+   * The repo does not compare LexAudit with other tools, so no claims about
+   * "existing approaches" are made here.
+   */
+  gapFromRepo: [
+    {
+      k: 'a',
+      title: 'The problem it targets',
+      text: 'Coherence problems inside a single contract: clauses that are out of place, cross-references that point nowhere, and dates that conflict.',
+      source: 'README · Features',
+    },
+    {
+      k: 'b',
+      title: 'Constraints it designs for',
+      text: 'Contract text stays on the machine: analysis runs on a local CPU, uploads are encrypted at rest with retention defaulting to 24 hours, and no paid LLM API is used for core inference.',
+      source: 'README · docs/system_card.md · docs/data_governance.md',
+    },
+    {
+      k: 'c',
+      title: 'How it responds',
+      text: 'Two scoring channels (semantic and adjacent-clause coherence) plus reference and date rules. Flags come with a severity and an explanation, and position suggestions can abstain when the evidence is ambiguous.',
+      source: 'README · src/scoring · src/rules · src/xai',
+    },
+  ],
+  /** Optional, in Lavan's own words — each renders only when filled. */
   gap: {
-    // TODO(lavan): fill each of these three in your own words.
+    // TODO(lavan): optional — fill any of these three in your own words.
     existingChallenges: PLACEHOLDER as Editable,
     limitationsOfExistingApproaches: PLACEHOLDER as Editable,
     whyOurApproachIsNeeded: PLACEHOLDER as Editable,
