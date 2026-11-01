@@ -280,8 +280,8 @@ export default function Project() {
                   <tbody>
                     {p.modelDetails.map((m) => (
                       <tr key={m.k} className="border-b border-ivory/10 align-top">
-                        <th scope="row" className="py-3 pr-4 font-semibold">{m.k}</th>
-                        <td className="py-3 leading-relaxed text-ivory/85">{m.v}</td>
+                        <th scope="row" className="break-words py-3 pr-4 font-semibold">{m.k}</th>
+                        <td className="py-3 leading-relaxed text-ivory/85 [overflow-wrap:anywhere]">{m.v}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -377,7 +377,7 @@ export default function Project() {
                 <tbody>
                   {p.techStack.filter((g) => g.items.length > 0).map((g) => (
                     <tr key={g.category} className="border-b border-ivory/10 align-top">
-                      <th scope="row" className="w-[34%] py-4 pr-4 font-mono text-[11px] font-normal uppercase tracking-wider text-sage md:w-auto md:text-xs">{g.category}</th>
+                      <th scope="row" className="w-[34%] break-words py-4 pr-4 font-mono text-[11px] font-normal uppercase tracking-wider text-sage md:w-auto md:text-xs">{g.category}</th>
                       <td className="py-4 pr-4">
                         <ul className="flex flex-wrap gap-2">
                           {g.items.map((it) => (
@@ -496,9 +496,9 @@ export default function Project() {
                 </div>
                 <dl className="grid grid-cols-2 gap-px self-start bg-ivory/10 md:col-span-7">
                   {p.inputs.limits.map((l) => (
-                    <div key={l.k} className="bg-ink p-4">
+                    <div key={l.k} className="min-w-0 bg-ink p-4">
                       <dt className="label text-ink-mute">{l.k}</dt>
-                      <dd className="mt-2 font-mono text-2xl text-ivory">{l.v}</dd>
+                      <dd className="mt-2 break-words font-mono text-xl text-ivory sm:text-2xl">{l.v}</dd>
                     </div>
                   ))}
                 </dl>

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Page from '../components/Page';
 import NextChapter from '../components/NextChapter';
 import { Reveal } from '../components/Bits';
@@ -10,17 +10,33 @@ import {
   recognitionEntries,
   type RecognitionCategory,
 } from '../content/contributions';
-import { collectEvidence, countByCategory, sortByDateDesc, summarize } from '../lib/recognition';
+import { allDated, collectEvidence, countByCategory, entryLabel, numberEntries, sameSession, summarize, timelineOrder } from '../lib/recognition';
 
 const CATEGORY_KEYS = Object.keys(recognitionCategories) as RecognitionCategory[];
 
 export default function Contributions() {
-  const entries = recognitionEntries;
+  const entries = useMemo(() => numberEntries(recognitionEntries), []);
   const summary = useMemo(() => summarize(entries), [entries]);
-  const sorted = useMemo(() => sortByDateDesc(entries), [entries]);
+  const sorted = useMemo(() => timelineOrder(entries), [entries]);
   const counts = useMemo(() => countByCategory(entries), [entries]);
-  const evidence = useMemo(() => collectEvidence(entries), [entries]);
+  const evidence = useMemo(
+    () => collectEvidence(entries).map((ev) => ({ ...ev, href: `#entry-${ev.entryId}`, linkLabel: entryLabel(ev.entryNo) })),
+    [entries]
+  );
   const [filter, setFilter] = useState<RecognitionCategory | 'all'>('all');
+
+  // In-page links to an entry (#entry-<id>) clear the filter so the entry is visible, then scroll to it.
+  useEffect(() => {
+    const go = () => {
+      const h = window.location.hash;
+      if (!h.startsWith('#entry-')) return;
+      setFilter('all');
+      window.setTimeout(() => document.getElementById(h.slice(1))?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60);
+    };
+    window.addEventListener('hashchange', go);
+    go();
+    return () => window.removeEventListener('hashchange', go);
+  }, []);
 
   const present = CATEGORY_KEYS.filter((k) => counts[k]);
   const visible = filter === 'all' ? sorted : sorted.filter((e) => e.category === filter);
@@ -88,11 +104,11 @@ export default function Contributions() {
               <section aria-labelledby="timeline-h" className="col-span-12 min-w-0 lg:col-span-9">
                 <div className="mb-8 flex flex-wrap items-baseline justify-between gap-3 border-b-2 border-ink pb-3">
                   <h2 id="timeline-h" className="font-serif text-4xl leading-none md:text-5xl">Recognition timeline</h2>
-                  <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink/60">Newest first</p>
+                  <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink/60">{allDated(entries) ? 'Oldest first' : 'In entry order'}</p>
                 </div>
                 <div aria-live="polite">
                   {visible.map((e) => (
-                    <RecognitionEntryCard key={e.id} entry={e} />
+                    <RecognitionEntryCard key={e.id} entry={e} sessionWith={sameSession(e, entries)} />
                   ))}
                 </div>
               </section>
@@ -106,9 +122,9 @@ export default function Contributions() {
         <section aria-labelledby="evidence-h" className="page-x py-14 lg:py-20">
           <div className="mb-6 flex flex-wrap items-baseline justify-between gap-3 border-t border-ivory/15 pt-8">
             <h2 id="evidence-h" className="font-serif text-3xl md:text-4xl">Evidence gallery</h2>
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-ink-mute">click to enlarge</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-ink-mute">Handwritten notebook recognitions · click to enlarge</p>
           </div>
-          <PresentationGallery images={evidence} />
+          <PresentationGallery images={evidence} cols={1} className="max-w-5xl" />
         </section>
       )}
 
