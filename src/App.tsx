@@ -6,6 +6,7 @@ import About from './pages/About';
 import Project from './pages/Project';
 import Learning from './pages/Learning';
 import Exhibits from './pages/Exhibits';
+import Contributions from './pages/Contributions';
 import NotFound from './pages/NotFound';
 
 export default function App() {
@@ -19,6 +20,7 @@ export default function App() {
           <Route path="/project" element={<Project />} />
           <Route path="/learning" element={<Learning />} />
           <Route path="/exhibits" element={<Exhibits />} />
+          <Route path="/contributions" element={<Contributions />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </AnimatePresence>
