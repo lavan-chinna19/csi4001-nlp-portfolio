@@ -31,11 +31,36 @@ export function PipelineDiagram() {
 
   return (
     <div>
-      <ol role="tablist" aria-label="LexAudit NLP pipeline stages" className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+      {/*
+        Connected workflow. ≥1024px: 4 steps per row; 768–1023px: 2 per row; arrows sit in the
+        gutter between steps of the same row. <768px: vertical steps joined by a rail.
+        Labels always wrap — nothing is truncated or clipped.
+      */}
+      <ol
+        role="tablist"
+        aria-label="LexAudit NLP pipeline stages"
+        className="grid gap-3 md:grid-cols-2 md:gap-x-10 md:gap-y-4 lg:grid-cols-4"
+        data-testid="pipeline-steps"
+      >
         {stages.map((s, i) => {
           const on = active === s.id;
+          const last = i === stages.length - 1;
+          const endMd = i % 2 === 1;
+          const endLg = i % 4 === 3;
+          const nn = String(i + 1).padStart(2, '0');
           return (
-            <li key={s.id} role="presentation" className="relative">
+            <li key={s.id} role="presentation" className="relative min-w-0 pl-12 md:pl-0">
+              {/* narrow screens: numbered node + vertical rail */}
+              <span
+                aria-hidden
+                className={`absolute left-0 top-3 flex h-8 w-8 items-center justify-center rounded-full border font-mono text-[11px] md:hidden ${
+                  on ? 'border-lime bg-lime text-ink' : s.present ? 'border-ivory/40 bg-ink text-ivory/80' : 'border-dashed border-ivory/40 bg-ink text-ivory/70'
+                }`}
+              >
+                {nn}
+              </span>
+              {!last && <span aria-hidden className="absolute bottom-[-0.75rem] left-4 top-11 w-px bg-ivory/20 md:hidden" />}
+
               <button
                 ref={(el) => { refs.current[s.id] = el; }}
                 type="button"
@@ -46,27 +71,33 @@ export function PipelineDiagram() {
                 tabIndex={on ? 0 : -1}
                 onClick={() => setActive(s.id)}
                 onKeyDown={(e) => onKey(e, s.id)}
-                className={`group flex h-full w-full items-start gap-3 border px-3 py-3 text-left transition-colors ${
+                className={`flex h-full w-full min-w-0 flex-col items-start gap-1.5 border px-4 py-3 text-left transition-colors ${
                   on ? 'border-lime bg-lime text-ink' : s.present ? 'border-ivory/20 bg-ink-soft hover:border-ivory/50' : 'border-dashed border-ivory/25 bg-transparent hover:border-ivory/50'
                 }`}
               >
-                <span className={`font-mono text-[10px] ${on ? 'text-ink/70' : 'text-ink-mute'}`}>{String(i + 1).padStart(2, '0')}</span>
-                <span className="min-w-0">
-                  <span className="block text-[13px] font-semibold leading-snug">{s.label}</span>
-                  {!s.present && (
-                    <span className={`mt-1 block font-mono text-[9px] uppercase tracking-[0.12em] ${on ? 'text-ink/70' : 'text-ink-mute'}`}>Not a separate stage</span>
-                  )}
-                </span>
-                {i < stages.length - 1 && (
-                  <ArrowRight size={12} aria-hidden className={`ml-auto mt-0.5 shrink-0 ${on ? 'text-ink/60' : 'text-ink-mute'}`} />
+                <span className={`hidden font-mono text-[11px] md:block ${on ? 'text-ink/70' : 'text-ink-mute'}`}>{nn}</span>
+                <span className="block min-w-0 max-w-full break-words text-[15px] font-semibold leading-snug">{s.label}</span>
+                {!s.present && (
+                  <span className={`block font-mono text-[10px] uppercase leading-snug tracking-[0.1em] ${on ? 'text-ink/70' : 'text-ink-mute'}`}>Not a separate stage</span>
                 )}
               </button>
+
+              {/* wide screens: connector to the next step in the same row */}
+              {!last && (
+                <span
+                  aria-hidden
+                  className={`pointer-events-none absolute -right-10 top-1/2 hidden w-10 -translate-y-1/2 items-center justify-center text-lime/80 ${endMd ? '' : 'md:flex'} ${endLg ? 'lg:hidden' : 'lg:flex'}`}
+                >
+                  <ArrowRight size={16} />
+                </span>
+              )}
             </li>
           );
         })}
       </ol>
+      <p className="mt-3 hidden font-mono text-[11px] text-ink-mute md:block">Steps read left to right, then continue on the next row.</p>
 
-      <div id="pipeline-detail" role="tabpanel" aria-labelledby={`stage-tab-${current.id}`} aria-live="polite" className="mt-4 min-h-[200px] border border-ivory/15 bg-ink-soft p-6 md:p-8">
+      <div id="pipeline-detail" role="tabpanel" aria-labelledby={`stage-tab-${current.id}`} aria-live="polite" className="mt-6 min-h-[200px] border border-ivory/15 bg-ink-soft p-6 md:p-8">
         <AnimatePresence mode="wait">
           <motion.div
             key={current.id}
@@ -78,10 +109,10 @@ export function PipelineDiagram() {
           >
             <div className="md:col-span-4">
               <p className="font-mono text-[11px] text-lime">STAGE {String(idx + 1).padStart(2, '0')} / {stages.length}</p>
-              <h3 className="mt-2 font-serif text-3xl leading-tight md:text-4xl">{current.label}</h3>
-              <p className="mt-3 break-words font-mono text-xs leading-relaxed text-sage">{current.component}</p>
+              <h3 className="mt-2 break-words font-serif text-3xl leading-tight md:text-4xl">{current.label}</h3>
+              <p className="mt-3 font-mono text-xs leading-relaxed text-sage [overflow-wrap:anywhere]">{current.component}</p>
               {!current.present && (
-                <p className="mt-3 inline-block border border-dashed border-ivory/30 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.12em] text-ivory/70">Placeholder · not a separate stage</p>
+                <p className="mt-3 inline-block max-w-full border border-dashed border-ivory/30 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.12em] text-ivory/70">Placeholder · not a separate stage</p>
               )}
             </div>
             <p className="text-[16px] leading-relaxed text-ivory/85 md:col-span-7 md:col-start-6">{current.text}</p>
@@ -98,8 +129,8 @@ export function ArchitectureDiagram() {
   const links = ['HTTP', 'reverse proxy', 'SQL'];
   return (
     <figure>
-      <div className="relative border border-dashed border-ivory/25 p-4 pt-9 md:p-6 md:pt-10">
-        <p className="absolute left-4 top-3 font-mono text-[10px] uppercase tracking-[0.16em] text-ink-mute">Docker Compose · default deployment</p>
+      <div className="relative border border-dashed border-ivory/25 p-4 pt-3 md:p-6 md:pt-3">
+        <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.16em] text-ink-mute md:mb-4">Docker Compose · default deployment</p>
         <div className="grid items-stretch gap-2 md:grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr] md:gap-0">
           {a.map((node, i) => (
             <div key={node.id} className="contents">
@@ -110,10 +141,10 @@ export function ArchitectureDiagram() {
                   <ArrowRight size={16} className="hidden text-lime md:block" aria-hidden />
                 </div>
               )}
-              <div className={`border p-4 ${i >= 2 ? 'border-sage/60' : 'border-ivory/25'} bg-ink-soft`}>
+              <div className={`min-w-0 border p-4 ${i >= 2 ? 'border-sage/60' : 'border-ivory/25'} bg-ink-soft`}>
                 <p className="font-mono text-[10px] text-ink-mute">{String(i + 1).padStart(2, '0')}</p>
-                <p className="mt-1 font-serif text-2xl leading-tight">{node.label}</p>
-                <p className="mt-2 font-mono text-[11px] leading-relaxed text-ivory/70">{node.tech}</p>
+                <p className="mt-1 break-words font-serif text-2xl leading-tight">{node.label}</p>
+                <p className="mt-2 font-mono text-[11px] leading-relaxed text-ivory/70 [overflow-wrap:anywhere]">{node.tech}</p>
               </div>
             </div>
           ))}

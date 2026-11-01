@@ -11,6 +11,9 @@ export interface GalleryImage {
   caption: string;
   width?: number;
   height?: number;
+  /** Optional in-page link shown under the caption (e.g. to the entry a photo belongs to). */
+  href?: string;
+  linkLabel?: string;
 }
 
 const dims = (img: GalleryImage) => ({ width: img.width ?? 800, height: img.height ?? 600 });
@@ -104,7 +107,7 @@ function Lightbox({
           style={{ aspectRatio: `${dims(img).width} / ${dims(img).height}` }}
         />
         <figcaption className="mt-4 flex w-full flex-wrap items-center justify-between gap-3 font-mono text-xs text-ivory/75">
-          <span>
+          <span className="min-w-0 break-words">
             <span className="text-lime">Fig. {String(index + 1).padStart(2, '0')}</span> — {img.caption}
           </span>
           {many && (
@@ -127,16 +130,20 @@ function Lightbox({
 
 /**
  * Gallery with click-to-enlarge lightbox.
- * `plate` (default): two-up figures with captions. `thumbs`: compact thumbnail row.
+ * `plate` (default): two-up figures with captions (`cols={1}` stacks them).
+ * `thumbs`: compact thumbnails for the ivory journal; images with known
+ * width/height keep their natural aspect ratio (never cropped).
  * Renders nothing when `images` is empty.
  */
 export function PresentationGallery({
   images,
   variant = 'plate',
+  cols = 2,
   className = '',
 }: {
   images: GalleryImage[];
   variant?: 'plate' | 'thumbs';
+  cols?: 1 | 2;
   className?: string;
 }) {
   const [open, setOpen] = useState<number | null>(null);
@@ -153,11 +160,12 @@ export function PresentationGallery({
 
   return (
     <>
-      <ul className={`${thumbs ? 'flex flex-wrap gap-2' : 'grid gap-6 md:grid-cols-2'} ${className}`}>
+      <ul className={`${thumbs ? 'flex flex-wrap gap-3' : cols === 2 ? 'grid gap-6 md:grid-cols-2' : 'grid gap-10'} ${className}`}>
         {images.map((img, i) => {
           const d = dims(img);
+          const natural = img.width !== undefined && img.height !== undefined;
           return (
-            <li key={img.src} className={thumbs ? 'w-24 sm:w-28' : ''}>
+            <li key={img.src} className={thumbs ? (natural ? 'w-full max-w-[30rem]' : 'w-24 sm:w-28') : 'min-w-0'}>
               <figure>
                 <button
                   ref={(el) => {
@@ -169,8 +177,8 @@ export function PresentationGallery({
                     setOpen(i);
                   }}
                   aria-label={`Enlarge image: ${img.caption}`}
-                  className="group relative block w-full overflow-hidden border border-ivory/15 bg-ink-soft"
-                  style={{ aspectRatio: thumbs ? '4 / 3' : `${d.width} / ${d.height}` }}
+                  className={`group relative block w-full overflow-hidden border ${thumbs ? 'border-ink/20 bg-ivory-deep' : 'border-ivory/15 bg-ink-soft'}`}
+                  style={{ aspectRatio: thumbs && !natural ? '4 / 3' : `${d.width} / ${d.height}` }}
                 >
                   <img
                     src={img.src}
@@ -179,7 +187,7 @@ export function PresentationGallery({
                     height={d.height}
                     loading="lazy"
                     decoding="async"
-                    className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                    className={`h-full w-full ${natural ? 'object-contain' : 'object-cover'} transition-transform duration-500 ease-out group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100`}
                   />
                   <span aria-hidden className="pointer-events-none absolute inset-0 bg-ink/0 transition-colors duration-300 group-hover:bg-ink/15" />
                   {!thumbs && (
@@ -188,10 +196,18 @@ export function PresentationGallery({
                     </span>
                   )}
                 </button>
+                {thumbs && natural && (
+                  <figcaption className="mt-2 break-words font-mono text-[11px] leading-relaxed text-ink/65">{img.caption} · click to enlarge</figcaption>
+                )}
                 {!thumbs && (
-                  <figcaption className="mt-3 flex items-baseline gap-3 font-mono text-xs text-ivory/70">
-                    <span className="text-lime">Fig. {String(i + 1).padStart(2, '0')}</span>
-                    <span>{img.caption}</span>
+                  <figcaption className="mt-3 flex flex-wrap items-baseline gap-x-3 gap-y-1 font-mono text-xs text-ivory/70">
+                    <span className="shrink-0 text-lime">Fig. {String(i + 1).padStart(2, '0')}</span>
+                    <span className="min-w-0 flex-1 break-words">{img.caption}</span>
+                    {img.href && (
+                      <a href={img.href} className="shrink-0 border-b border-lime/50 text-lime hover:border-lime">
+                        {img.linkLabel ?? 'View'} ↑
+                      </a>
+                    )}
                   </figcaption>
                 )}
               </figure>

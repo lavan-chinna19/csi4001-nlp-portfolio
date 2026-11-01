@@ -61,6 +61,7 @@ export default function SectionToc({ items, dark, title = 'On this page' }: { it
       </nav>
       <nav
         aria-label={`${title} (compact)`}
+        data-hscroll-ok="swipeable section index"
         className={`scrollbar-thin sticky top-14 z-40 -mx-5 overflow-x-auto border-b px-5 py-2.5 backdrop-blur-md sm:-mx-8 sm:px-8 lg:hidden ${
           dark ? 'border-ivory/10 bg-ink/85' : 'border-ink/10 bg-ivory/90'
         }`}

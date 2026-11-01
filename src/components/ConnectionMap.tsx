@@ -43,7 +43,7 @@ export default function ConnectionMap() {
         type="button"
         aria-pressed={active}
         onClick={() => (active ? setSel(null) : pickExhibit(e.id))}
-        className={`w-full truncate border px-3 text-left font-serif transition-all ${compact ? 'py-1.5 text-lg' : 'text-xl'} ${
+        className={`w-full min-w-0 break-words border px-3 text-left font-serif leading-[1.05] transition-all ${compact ? 'py-1.5 text-lg' : 'text-xl'} ${
           active ? 'border-lime bg-lime text-ink' : on ? 'border-ivory/25 text-ivory hover:border-ivory/60' : 'border-ivory/10 text-ivory/50'
         }`}
         style={compact ? undefined : { height: ROW - 8 }}
@@ -66,8 +66,8 @@ export default function ConnectionMap() {
         }`}
         style={compact ? undefined : { height: ROW - 8 }}
       >
-        <span className="truncate">{c.label}</span>
-        <span className={active ? 'text-ink/70' : 'text-ink-mute'}>{degree(c.id)}</span>
+        <span className="min-w-0 break-words leading-tight">{c.label}</span>
+        <span className={`shrink-0 ${active ? 'text-ink/70' : 'text-ink-mute'}`}>{degree(c.id)}</span>
       </button>
     );
   };
