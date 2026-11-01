@@ -24,3 +24,24 @@ export interface MaybeLink {
   href: string | null;
   placeholder: string;
 }
+
+/**
+ * PLACEHOLDER — an editable field Lavan has not written yet.
+ * Any content field set to `PLACEHOLDER` (an empty string) renders as a subtle
+ * dashed "Add your … here" box instead of text. To fill one, replace
+ * `PLACEHOLDER` with your own words. Search the content files for
+ * `TODO(lavan)` to find every one.
+ */
+export const PLACEHOLDER = '';
+
+/** A string field that may still be a PLACEHOLDER (empty). */
+export type Editable = string;
+
+/** An image slot that may still be empty (`null` renders an "Add image" placeholder). */
+export interface ImageSlot {
+  src: string;
+  alt: string;
+  caption: string;
+  width: number;
+  height: number;
+}

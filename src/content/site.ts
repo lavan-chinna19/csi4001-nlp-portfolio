@@ -1,4 +1,5 @@
 import type { MaybeLink } from './types';
+import { about } from './about';
 
 /**
  * Global site settings. Edit here; every page reads from this file.
@@ -28,9 +29,11 @@ export const site = {
   showDraftTags: true,
 
   links: {
-    github: { label: 'GitHub', href: 'https://github.com/lavan-chinna19', placeholder: '[Add GitHub URL]' },
-    linkedin: { label: 'LinkedIn', href: null, placeholder: '[Add LinkedIn URL]' },
-    email: { label: 'Email', href: null, placeholder: '[Add email address]' },
+    // Edit the addresses in about.ts → contact.
+    github: { label: 'GitHub', href: about.contact.github, placeholder: '[Add GitHub URL]' },
+    linkedin: { label: 'LinkedIn', href: about.contact.linkedin, placeholder: '[Add LinkedIn URL]' },
+    /** Plain address — `mailto:` is added where it is rendered. */
+    email: { label: 'Email', href: about.contact.email, placeholder: '[Add email address]' },
   } satisfies Record<string, MaybeLink>,
 };
 

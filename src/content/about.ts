@@ -1,9 +1,13 @@
 /**
  * About page content.
  * The prose below is written ONLY from facts Lavan confirmed on 2026-11-01.
- * Anything in [square brackets] is a placeholder to replace.
- * Set a section's `placeholder: false` once you have written real text.
+ *
+ * EDITABLE FIELDS: anything set to `PLACEHOLDER` (search for `TODO(lavan)`)
+ * renders as a dashed "Add your reflection here" box. Replace `PLACEHOLDER`
+ * with your own words — the box disappears automatically.
  */
+import { PLACEHOLDER, type Editable } from './types';
+
 export interface AboutSection {
   id: string;
   kicker: string;
@@ -13,23 +17,31 @@ export interface AboutSection {
   chips?: string[];
 }
 
+export interface EditableBlock {
+  id: string;
+  title: string;
+  body: Editable;
+}
+
 export const about = {
   title: 'The person behind the words',
-  photo: {
-    src: '/images/profile-placeholder.svg',
-    alt: 'Placeholder for a portrait photo of Lavan Kumar',
-    isPlaceholder: true,
-  },
 
   /** Confirmed fact sheet. */
   facts: [
     { k: 'Name', v: 'Lavan Kumar' },
-    { k: 'Registration no.', v: '23MID0108' },
+    { k: 'Registration number', v: '23MID0108' },
     { k: 'Native place', v: 'Medak, Telangana, India' },
     { k: 'University', v: 'VIT Vellore' },
     { k: 'Degree', v: 'Data Science' },
     { k: 'Course', v: 'CSI4001 · NLP & Computational Linguistics · 4 credits' },
   ],
+
+  /** Contact links (also used by the site footer via site.ts). */
+  contact: {
+    linkedin: 'https://www.linkedin.com/in/lavan-kumar/',
+    email: 'lavankumar2234@gmail.com',
+    github: 'https://github.com/lavan-chinna19',
+  },
 
   sections: [
     {
@@ -67,19 +79,35 @@ export const about = {
       chips: ['Python', 'Java', 'SQL', 'TensorFlow', 'PyTorch', 'Streamlit', 'Power BI', 'Tableau', 'GitHub'],
       placeholder: false,
     },
-    {
-      id: 'how-i-learn',
-      kicker: 'IV.',
-      title: 'How I learn',
-      body: ['[Two or three honest lines about how you approach learning.]'],
-      placeholder: true,
-    },
-    {
-      id: 'aspirations',
-      kicker: 'V.',
-      title: 'Future aspirations',
-      body: ['[Where would you like this to lead — research, industry, a particular problem?]'],
-      placeholder: true,
-    },
   ] satisfies AboutSection[],
+
+  /** IV. How I learn — five headed sub-sections. */
+  howILearn: {
+    id: 'how-i-learn',
+    kicker: 'IV.',
+    title: 'How I learn',
+    blocks: [
+      // TODO(lavan): write each body in your own words.
+      { id: 'fundamentals', title: 'Understanding the Fundamentals', body: PLACEHOLDER },
+      { id: 'implementation', title: 'Learning Through Implementation', body: PLACEHOLDER },
+      { id: 'experimenting', title: 'Experimenting with Different Approaches', body: PLACEHOLDER },
+      { id: 'mistakes', title: 'Learning from Mistakes', body: PLACEHOLDER },
+      { id: 'real-world', title: 'Exploring Real-World Applications', body: PLACEHOLDER },
+    ] satisfies EditableBlock[],
+  },
+
+  /** V. Future aspirations — five fields. */
+  aspirations: {
+    id: 'aspirations',
+    kicker: 'V.',
+    title: 'Future aspirations',
+    fields: [
+      // TODO(lavan): write each body in your own words.
+      { id: 'explore', title: 'Areas I Want to Explore', body: PLACEHOLDER },
+      { id: 'skills', title: 'Technical Skills I Want to Develop', body: PLACEHOLDER },
+      { id: 'career', title: 'My Long-Term Career Goals', body: PLACEHOLDER },
+      { id: 'problems', title: 'Problems I Want to Solve', body: PLACEHOLDER },
+      { id: 'build-next', title: 'What I Want to Build Next', body: PLACEHOLDER },
+    ] satisfies EditableBlock[],
+  },
 };
