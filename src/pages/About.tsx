@@ -3,7 +3,7 @@ import SectionToc from '../components/SectionToc';
 import NextChapter from '../components/NextChapter';
 import { EditableText, Reveal, hasText } from '../components/Bits';
 import InterestConstellation from '../components/InterestConstellation';
-import { about } from '../content/about';
+import { about, lessons } from '../content/about';
 import { site } from '../content/site';
 
 /** href + link attributes for a contact link. Email → mailto (same tab); others → new tab. */
@@ -158,6 +158,53 @@ export default function About() {
           </section>
         </div>
       </div>
+
+      {/* Closing — "Some Lessons Stay With Us." editorial list, muted sage accents */}
+      <section id={lessons.id} aria-labelledby="lessons-title" className="page-x scroll-mt-32 pb-20 pt-4 lg:pb-28">
+        <div className="border-t border-sage/30 pt-14 lg:pt-20">
+          <div className="grid grid-cols-12 gap-x-6 gap-y-6">
+            <Reveal className="col-span-12 lg:sticky lg:top-32 lg:col-span-4 lg:self-start">
+              <p className="label text-sage">{lessons.eyebrow}</p>
+              <h2 id="lessons-title" className="mt-5 font-serif leading-[0.95] tracking-tight text-ivory" style={{ fontSize: 'clamp(2.4rem, 5vw, 4.25rem)' }}>
+                {lessons.title}
+              </h2>
+              <p className="mt-6 max-w-sm font-sans text-[16px] leading-relaxed text-ivory/70">{lessons.subtitle}</p>
+            </Reveal>
+
+            <ol className="col-span-12 border-t border-sage/25 lg:col-span-8 lg:mt-2">
+              {lessons.items.map((text, i) => {
+                const long = text.length > 50;
+                const indent = ['', 'md:pl-[16%]', 'md:pl-[6%]', 'md:pl-[22%]', 'md:pl-[10%]'][i];
+                return (
+                  <li key={i} className="border-b border-sage/20">
+                    <Reveal delay={i * 0.06}>
+                      <div className={`grid grid-cols-[2.75rem_minmax(0,1fr)] items-baseline gap-x-4 py-8 sm:grid-cols-[3.5rem_minmax(0,1fr)] md:py-10 ${indent}`}>
+                        <span className="font-mono text-xs tracking-[0.18em] text-sage">
+                          {String(i + 1).padStart(2, '0')}
+                        </span>
+                        <p
+                          className={`font-serif leading-[1.08] text-ivory ${long ? 'max-w-[26ch]' : 'max-w-[22ch]'} ${i % 2 ? 'italic' : ''}`}
+                          style={{ fontSize: long ? 'clamp(1.6rem, 3.2vw, 2.6rem)' : 'clamp(1.85rem, 4vw, 3.25rem)' }}
+                        >
+                          {text}
+                        </p>
+                      </div>
+                    </Reveal>
+                  </li>
+                );
+              })}
+            </ol>
+
+            <Reveal className="col-span-12 lg:col-span-8 lg:col-start-5" delay={0.1}>
+              <p className="mt-10 flex flex-wrap items-baseline justify-end gap-x-4 gap-y-2 text-right">
+                <span aria-hidden className="hidden h-px w-16 self-center bg-sage/50 sm:block" />
+                <span className="font-mono text-[12px] tracking-[0.08em] text-sage">{lessons.attributionLead}</span>{' '}
+                <span className="font-serif text-2xl italic text-ivory md:text-3xl">{lessons.attributionName}</span>
+              </p>
+            </Reveal>
+          </div>
+        </div>
+      </section>
 
       <NextChapter to="/project" num="02" label="My Project" dark />
     </Page>
