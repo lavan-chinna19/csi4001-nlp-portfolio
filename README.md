@@ -79,8 +79,8 @@ The site never shows placeholder boxes. Optional fields are set to the `PLACEHOL
 | --- | --- |
 | LinkedIn, email, GitHub | `about.ts` → `contact` (shown in the About fact sheet and the site footer; `mailto:` is added for email) |
 | Future Aspirations wording | `about.ts` → `aspirations.intro`, `aspirations.closing`, `aspirations.areas` |
-| Project: full description, motivation (own words), gap (3 fields, own words) | `project.ts` → `fullDescription`, `motivation`, `gap` (the repo-grounded `motivationFromRepo` / `gapFromRepo` are always shown) |
-| Project: website prompts — actual prompt text, changes after generation | `project.ts` → `prompts[].actualPrompt`, `prompts[].changesAfter` |
+| Project: full description, motivation (own words), gap (3 fields, own words) | `project.ts` → `fullDescription`, `motivation`, `gap` (the factual `motivationFacts` / `gapFacts` are always shown) |
+| Project §07: prompts used in building LexAudit (title, aim, outcome — no prompt text) | `project.ts` → `promptsIntro`, `prompts[]` |
 | Project: gallery intro | `project.ts` → `gallery.intro` |
 | Project: architecture diagram image, technical-overview image | `project.ts` → `architectureDiagramImage`, `technicalOverviewImage` (`null` renders nothing; set to `{ src, alt, caption, width, height }` and put the file in `public/images/project/`) |
 | Project: optional notes (stack, data, users, own example) | `project.ts` → `techStackNote`, `datasetsNote`, `users.note`, `example.ownExample` |
@@ -109,7 +109,7 @@ When every reflection is reviewed, you can also hide all tags at once with `show
 
 ## Honesty notes
 
-- **LexAudit** facts come only from the repository (`main` = `codex/lexaudit-personal-release`, commit `e5436ea`): README, CONTRIBUTORS.md and docs/ (KNOWN_LIMITATIONS, RESEARCH_VALIDITY_STATUS, data_governance, system_card, PHASE2_IMPLEMENTATION_REPORT). Test counts are software verification, not accuracy. Individual contribution is not described.
+- **LexAudit** facts come only from the repository (`main` = `codex/lexaudit-personal-release`, commit `e5436ea`): README, CONTRIBUTORS.md and docs/ (KNOWN_LIMITATIONS, RESEARCH_VALIDITY_STATUS, data_governance, system_card, PHASE2_IMPLEMENTATION_REPORT). Test counts are software verification, not accuracy. Public-facing text carries no file/path or documentation attributions (Version 4); sources are listed only in §10 References. Individual contribution is not described.
 - **Demos** run fully client-side. The Porter stemmer and edit distance are complete algorithms; the tokenizer subword mode, lemma table, POS tagger, morphology set, CFG, sentiment lexicon and WordNet data are small and labelled as toys / static.
 - **Exhibit** URLs were checked (HTTP 200) on 2026-11-01; images are each repo's own GitHub social card.
 
