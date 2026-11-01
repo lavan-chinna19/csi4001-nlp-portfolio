@@ -142,3 +142,23 @@ export const about = {
     closing: 'These are interests I want to keep exploring — not finished achievements.',
   },
 };
+
+/**
+ * "Some Lessons Stay With Us." — closing section of the About page.
+ * Wording is exact; do not paraphrase. Attribution text must stay verbatim.
+ */
+export const lessons = {
+  id: 'lessons',
+  eyebrow: 'Words worth remembering',
+  title: 'Some Lessons Stay With Us.',
+  subtitle: 'Five simple reminders that carry a meaning beyond the classroom.',
+  items: [
+    'You deserve everything you dream of.',
+    'Believe in yourself.',
+    'Work hard and keep faith.',
+    'You have more potential than you think.',
+    'Find happiness in your work and in the people around you, and spread that happiness.',
+  ],
+  attributionLead: 'Lessons shared by',
+  attributionName: 'Sharmila Banu K.',
+} as const;
