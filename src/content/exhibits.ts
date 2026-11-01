@@ -2,9 +2,9 @@ import { draft, type Reflection } from './types';
 import type { ConceptId } from './conceptMap';
 
 /**
- * Exhibits: real open-source NLP projects. Every repo URL was checked (HTTP 200)
- * on 2026-11-01. Images are the GitHub OpenGraph cards for each repo, saved locally.
- * Factual fields are based on each repo's README (and the papers it links).
+ * Exhibits: real open-source NLP projects. Every project URL was checked (HTTP 200)
+ * on 2026-11-01. Images are the GitHub OpenGraph cards for each project, saved locally.
+ * Factual fields are based on each project's own published description (and the papers it links).
  * First-person fields are DRAFTS until rewritten and set to status "approved".
  */
 export interface Exhibit {
@@ -29,7 +29,7 @@ export interface Exhibit {
   };
   takeaway: Reflection;
   concepts: ConceptId[];
-  /** Optional factual status note from the README. */
+  /** Optional factual status note from the project's own page. */
   statusNote?: string;
 }
 
@@ -42,7 +42,7 @@ export const exhibits: Exhibit[] = [
     repo: 'grammarly/gector',
     href: 'https://github.com/grammarly/gector',
     image: og('grammarly_gector'),
-    imageAlt: 'GitHub social card for the grammarly/gector repository',
+    imageAlt: 'GitHub social card for the grammarly/gector project',
     field: 'Grammatical error correction',
     whatItDoes:
       'Corrects grammatical errors by tagging each token with an edit instead of rewriting the sentence — "Tag, Not Rewrite". Official PyTorch code for the Grammarly paper at the BEA workshop (ACL 2020).',
@@ -52,7 +52,7 @@ export const exhibits: Exhibit[] = [
       'Most correction systems are sequence-to-sequence "translators" from wrong to right text. GECToR keeps a transformer encoder and predicts one edit tag per token (keep, delete, append, replace, or grammatical transformations like changing verb form), applying them over a few iterations.',
     whatILearned: draft('Reframing a task can make it simpler and faster: you do not always need to generate text to change text.'),
     nlp: {
-      representation: 'Subword tokens encoded by a pretrained transformer encoder (BERT, RoBERTa or XLNet in the README’s released models).',
+      representation: 'Subword tokens encoded by a pretrained transformer encoder (BERT, RoBERTa or XLNet in the released models).',
       technique: 'Token-level sequence tagging with a vocabulary of edit operations; iterative correction passes.',
       ambiguity: 'Contextual encoder representations decide whether a token needs an edit given its whole sentence.',
       output: 'Edit tags are applied to the input tokens to produce the corrected sentence.',
@@ -67,7 +67,7 @@ export const exhibits: Exhibit[] = [
     repo: 'AI4Bharat/IndicTrans2',
     href: 'https://github.com/AI4Bharat/IndicTrans2',
     image: og('ai4bharat_indictrans2'),
-    imageAlt: 'GitHub social card for the AI4Bharat/IndicTrans2 repository',
+    imageAlt: 'GitHub social card for the AI4Bharat/IndicTrans2 project',
     field: 'Machine translation · Indian languages',
     whatItDoes:
       'An open-source transformer-based multilingual neural machine translation model covering all 22 scheduled Indian languages, released with its training data (BPCC), back-translation data and the IN22 benchmark.',
@@ -92,7 +92,7 @@ export const exhibits: Exhibit[] = [
     repo: 'openai/whisper',
     href: 'https://github.com/openai/whisper',
     image: og('openai_whisper'),
-    imageAlt: 'GitHub social card for the openai/whisper repository',
+    imageAlt: 'GitHub social card for the openai/whisper project',
     field: 'Speech recognition',
     whatItDoes:
       'A general-purpose speech recognition model trained on a large, diverse audio dataset. One model performs multilingual speech recognition, speech translation and language identification.',
@@ -117,7 +117,7 @@ export const exhibits: Exhibit[] = [
     repo: 'urchade/GLiNER',
     href: 'https://github.com/urchade/GLiNER',
     image: og('urchade_gliner'),
-    imageAlt: 'GitHub social card for the urchade/GLiNER repository',
+    imageAlt: 'GitHub social card for the urchade/GLiNER project',
     field: 'Named entity recognition',
     whatItDoes:
       'A framework for small named entity recognition models with zero-shot capabilities: you supply the entity types you want at inference time. It is designed to run on CPUs and consumer hardware.',
@@ -142,7 +142,7 @@ export const exhibits: Exhibit[] = [
     repo: 'stanford-futuredata/ColBERT',
     href: 'https://github.com/stanford-futuredata/ColBERT',
     image: og('stanford-futuredata_colbert'),
-    imageAlt: 'GitHub social card for the stanford-futuredata/ColBERT repository',
+    imageAlt: 'GitHub social card for the stanford-futuredata/ColBERT project',
     field: 'Neural retrieval',
     whatItDoes:
       'A fast and accurate retrieval model for BERT-based search over large text collections, used for search and as the retriever in question answering and retrieval-augmented generation.',
@@ -167,7 +167,7 @@ export const exhibits: Exhibit[] = [
     repo: 'cjhutto/vaderSentiment',
     href: 'https://github.com/cjhutto/vaderSentiment',
     image: og('cjhutto_vadersentiment'),
-    imageAlt: 'GitHub social card for the cjhutto/vaderSentiment repository',
+    imageAlt: 'GitHub social card for the cjhutto/vaderSentiment project',
     field: 'Sentiment analysis',
     whatItDoes:
       'VADER (Valence Aware Dictionary and sEntiment Reasoner) is a lexicon- and rule-based sentiment analysis tool specifically attuned to sentiment expressed in social media.',
@@ -192,7 +192,7 @@ export const exhibits: Exhibit[] = [
     repo: 'google-research/pegasus',
     href: 'https://github.com/google-research/pegasus',
     image: og('google-research_pegasus'),
-    imageAlt: 'GitHub social card for the google-research/pegasus repository',
+    imageAlt: 'GitHub social card for the google-research/pegasus project',
     field: 'Abstractive summarization',
     whatItDoes:
       'Pre-training with Extracted Gap-sentences for Abstractive SUmmarization: a transformer encoder–decoder pre-trained with a self-supervised objective designed to resemble summarization (ICML 2020).',
@@ -217,7 +217,7 @@ export const exhibits: Exhibit[] = [
     repo: 'RasaHQ/rasa',
     href: 'https://github.com/RasaHQ/rasa',
     image: og('rasahq_rasa'),
-    imageAlt: 'GitHub social card for the RasaHQ/rasa repository',
+    imageAlt: 'GitHub social card for the RasaHQ/rasa project',
     field: 'Conversational AI',
     whatItDoes:
       'An open-source framework for building conversational assistants: NLU (intent classification and entity extraction) plus dialogue management.',
@@ -235,7 +235,7 @@ export const exhibits: Exhibit[] = [
     },
     takeaway: draft('Joint models can be simpler than separate ones when tasks share the same input.'),
     concepts: ['classification', 'tagging', 'attention', 'embeddings'],
-    statusNote: 'The README notes Rasa Open Source is now in maintenance mode, with the company focusing on its newer CALM approach.',
+    statusNote: 'Rasa Open Source is now in maintenance mode, with the company focusing on its newer CALM approach.',
   },
   {
     id: 'nanogpt',
@@ -243,14 +243,14 @@ export const exhibits: Exhibit[] = [
     repo: 'karpathy/nanoGPT',
     href: 'https://github.com/karpathy/nanoGPT',
     image: og('karpathy_nanogpt'),
-    imageAlt: 'GitHub social card for the karpathy/nanoGPT repository',
+    imageAlt: 'GitHub social card for the karpathy/nanoGPT project',
     field: 'Language modelling',
     whatItDoes:
-      'A minimal repository for training and fine-tuning medium-sized GPTs: a short training loop and a short GPT model definition that can load GPT-2 weights, with a small character-level Shakespeare example.',
+      'A minimal codebase for training and fine-tuning medium-sized GPTs: a short training loop and a short GPT model definition that can load GPT-2 weights, with a small character-level Shakespeare example.',
     whatCaughtMyAttention: draft('A GPT model and its training loop fit in two short, readable files.'),
     whyILikedIt: draft('It connects the bigram counting from the n-gram module to how modern models predict the next token.'),
     whatMakesItDifferent:
-      'Readability and minimalism: the README describes train.py and model.py as roughly 300 lines each, making the full next-token-prediction training process inspectable.',
+      'Readability and minimalism: the training script and the model definition are each roughly 300 lines, making the full next-token-prediction training process inspectable.',
     whatILearned: draft('Next-token prediction is the same goal as an n-gram model; what changes is how much context and how the probabilities are computed.'),
     nlp: {
       representation: 'Token embeddings plus positional embeddings (characters or GPT-2 BPE tokens).',
@@ -261,6 +261,6 @@ export const exhibits: Exhibit[] = [
     },
     takeaway: draft('Read the smallest working version of a big idea before reading the big version.'),
     concepts: ['lm', 'generation', 'attention', 'tokenization', 'embeddings'],
-    statusNote: 'The README (Nov 2025 update) marks nanoGPT as old and deprecated, pointing to its successor nanochat.',
+    statusNote: 'Since a November 2025 update, nanoGPT is marked as old and deprecated, with nanochat as its successor.',
   },
 ];

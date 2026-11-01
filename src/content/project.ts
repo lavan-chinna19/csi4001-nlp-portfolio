@@ -1,16 +1,10 @@
 /**
- * LexAudit case study — Lavan's CSI4001 course project (Version 2 write-up).
+ * LexAudit case study — Lavan's CSI4001 course project.
  *
- * FACTS below come ONLY from the project repository,
- * https://github.com/lavan-chinna19/Legal-contract-coherence-auditor-
- * branch `main` at commit 7b1da3f (2026-11-01). That commit is a descendant of
- * `codex/lexaudit-personal-release` (e5436ea) and adds the research-freeze work.
- * Files used: README.md, CONTRIBUTORS.md, requirements.txt, requirements-release.txt,
- * frontend/package.json, docker-compose.yml, Dockerfile.*, deploy/nginx.conf,
- * docs/system_card.md, docs/data_governance.md, docs/THIRD_PARTY_NOTICES.md,
- * docs/KNOWN_LIMITATIONS.md, docs/RESEARCH_VALIDITY_STATUS.md,
- * docs/FINAL_SOURCE_PARSING_AND_RESEARCH_FREEZE.md, docs/PERSONAL_MAIN_RELEASE_2026_11_01.md,
- * demo_ready/FINAL_DEMO_README.md, and source under src/ (cited per item).
+ * Facts below were taken from the LexAudit project's own documentation and
+ * source (branch `main` at commit 7b1da3f, 1 Nov 2026), and are written for the
+ * page in plain language WITHOUT file/path attributions (Version 4 rule: no
+ * internal repository references in public-facing text).
  *
  * OPTIONAL FIELDS: anything set to `PLACEHOLDER` (search for `TODO(lavan)`)
  * is NOT rendered. Replace `PLACEHOLDER` with your own words and it appears.
@@ -27,7 +21,7 @@ export const project = {
   fullName: 'Legal Contract Coherence Auditor',
   title: 'LexAudit – Legal Contract Coherence Auditor',
   repo: 'https://github.com/lavan-chinna19/Legal-contract-coherence-auditor-',
-  repoCommit: 'main @ 7b1da3f (1 Nov 2026)',
+  releaseLabel: 'Final release · Nov 2026',
   image: '/images/exhibits/lavan-chinna19_legal-contract-coherence-auditor-.webp',
 
   /** Headline status shown in the case header. */
@@ -77,7 +71,7 @@ export const project = {
   },
 
   /* ───────────────────────── 01 · Title ───────────────────────── */
-  /** Factual short summary (from README.md "Features"). */
+  /** Factual short summary. */
   summary:
     'A local legal-NLP research application. It reads a contract clause by clause and flags out-of-place clauses, broken cross-references and conflicting dates. Each flag carries a severity, an explanation and, where it can, a suggested position.',
   /** "At a glance" rows for §01 — each restates facts documented further down the page. */
@@ -91,46 +85,35 @@ export const project = {
   fullDescription: PLACEHOLDER as Editable,
 
   /* ───────────────────────── 02 · Motivation ───────────────────────── */
-  /**
-   * Repository-grounded framing (always shown, attributed to the repo).
-   * It states what the system is FOR — not why the team personally chose it.
-   */
-  motivationFromRepo: {
+  /** What the system is FOR — not why the team personally chose it. */
+  motivationFacts: {
     statement:
       'LexAudit is built to check a contract’s internal structure, clause by clause: whether each clause sits where it belongs, whether cross-references point to real sections, and whether dates contradict each other.',
     points: [
       'Primary intended use: academic and research evaluation of contract structure, clause-order anomalies, missing standard terms and dangling internal references.',
       'Outputs are research decision support for a human reviewer — not legal advice and not a replacement for licensed attorney review.',
     ],
-    source: 'docs/system_card.md · README',
   },
   // TODO(lavan): optional — why the team built LexAudit, in your own words. Shown only when filled.
   motivation: PLACEHOLDER as Editable,
 
   /* ─────────────── 03 · Existing gap / event that motivated it ─────────────── */
-  /**
-   * Repository-grounded framing of the gap (always shown, attributed).
-   * The repo does not compare LexAudit with other tools, so no claims about
-   * "existing approaches" are made here.
-   */
-  gapFromRepo: [
+  /** Framing of the gap. No comparison with other tools is claimed here. */
+  gapFacts: [
     {
       k: 'a',
       title: 'The problem it targets',
       text: 'Coherence problems inside a single contract: clauses that are out of place, cross-references that point nowhere, and dates that conflict.',
-      source: 'README · Features',
     },
     {
       k: 'b',
       title: 'Constraints it designs for',
       text: 'Contract text stays on the machine: analysis runs on a local CPU, uploads are encrypted at rest with retention defaulting to 24 hours, and no paid LLM API is used for core inference.',
-      source: 'README · docs/system_card.md · docs/data_governance.md',
     },
     {
       k: 'c',
       title: 'How it responds',
       text: 'Two scoring channels (semantic and adjacent-clause coherence) plus reference and date rules. Flags come with a severity and an explanation, and position suggestions can abstain when the evidence is ambiguous.',
-      source: 'README · src/scoring · src/rules · src/xai',
     },
   ],
   /** Optional, in Lavan's own words — each renders only when filled. */
@@ -142,7 +125,6 @@ export const project = {
   },
 
   /* ───────────────────────── 04 · Architecture ───────────────────────── */
-  /** Verified in docker-compose.yml + deploy/nginx.conf. */
   architecture: [
     { id: 'fe', label: 'Frontend', tech: 'Next.js 16 · React 19 · TypeScript' },
     { id: 'gw', label: 'Gateway', tech: 'Nginx 1.28 (reverse proxy)' },
@@ -150,7 +132,7 @@ export const project = {
     { id: 'db', label: 'Database', tech: 'PostgreSQL 16 (Docker) · SQLite natively' },
   ],
   architectureCaption:
-    'Frontend, gateway, backend and PostgreSQL form the default Docker Compose deployment. The backend and database (sage outline) sit on an internal network, and host ports bind only to loopback (README · docker-compose.yml).',
+    'Frontend, gateway, backend and PostgreSQL form the default Docker Compose deployment. The backend and database (sage outline) sit on an internal network, and host ports bind only to loopback.',
   /** Optional hand-drawn / exported architecture diagram. `null` shows an "Add diagram" box. */
   // TODO(lavan): add an architecture diagram image, e.g. { src: '/images/project/architecture.webp', alt, caption, width, height }.
   architectureDiagramImage: null as ImageSlot | null,
@@ -161,37 +143,37 @@ export const project = {
   components: [
     {
       name: 'Frontend',
-      path: 'frontend/',
+      tag: 'Next.js · React',
       text: 'Next.js App Router application with four primary sections — New Audit, Audit Results, Reports & History, Settings — plus optional Research Tools (model evaluation, compatibility maps, robustness experiments). Access keys stay in page memory only.',
     },
     {
       name: 'Gateway',
-      path: 'deploy/nginx.conf',
+      tag: 'Nginx reverse proxy',
       text: 'Nginx reverse proxy in front of the API (11 MB request bodies, 180 s read timeout). It is the only backend entry point exposed to the host.',
     },
     {
       name: 'Backend API',
-      path: 'src/api/',
+      tag: 'FastAPI service',
       text: 'FastAPI service: API-key sign-in, per-client document ownership, bounded ingestion, a single-worker analysis job queue, encrypted history, reports and reviewer feedback.',
     },
     {
       name: 'Analysis engine',
-      path: 'src/segmentation · src/embeddings · src/scoring · src/rules · src/xai',
+      tag: 'Segmentation · embeddings · scoring · rules · explanations',
       text: 'Clause segmentation, frozen Legal-BERT embeddings, the two scoring channels, severity ranking with conformal calibration, reference/date rules, explanations and counterfactual position suggestions.',
     },
     {
       name: 'Storage',
-      path: 'src/api/storage.py · docker-compose.yml',
+      tag: 'Encrypted files · SQLite / PostgreSQL',
       text: 'Uploads and completed analyses are encrypted with Fernet; reviewer feedback goes to SQLite natively or PostgreSQL 16 in Docker. Retention defaults to 24 hours.',
     },
     {
       name: 'Frozen model assets',
-      path: 'models/ · fixtures/',
-      text: 'The small coherence head (models/coherence_classifier.pt), LEDGAR-derived centroids (fixtures/ledgar_centroids.npz) and the conformal calibration fixture ship with the repo; Legal-BERT weights are downloaded once and then used offline.',
+      tag: 'Legal-BERT · coherence head · centroids',
+      text: 'The small coherence head, the LEDGAR-derived clause-type centroids and the conformal calibration data are bundled with the application; Legal-BERT weights are downloaded once and then used offline.',
     },
   ],
 
-  /** User workflow (README "Native launch" + "UI workflow update"). */
+  /** User workflow. */
   workflow: [
     { step: 'Connect', text: 'In Settings, enter an access key and connect to the local engine.' },
     { step: 'Upload & preview', text: 'In New Audit, acknowledge the privacy notice, choose a file and preview its clauses.' },
@@ -200,41 +182,35 @@ export const project = {
     { step: 'Export', text: 'Reports & History: download PDF/DOCX reports or reopen saved analyses.' },
   ],
 
-  /** Model architecture details — each value cites the file it comes from. */
+  /** Model architecture details. */
   modelDetails: [
     {
       k: 'Encoder',
       v: 'nlpaueb/legal-bert-base-uncased, loaded through sentence-transformers on CPU with all weights frozen; 768-dimensional, normalised clause embeddings, cached per clause.',
-      src: 'src/embeddings/frozen.py · src/config.py',
     },
     {
       k: 'Channel A · semantic',
       v: 'Cosine distance from each clause embedding to the nearest of 66 LEDGAR-derived clause-type centroids, rescaled to a 0–1 anomaly score; top-3 nearest centroids kept as evidence.',
-      src: 'src/scoring/channel_a.py · fixtures/ledgar_centroids.npz',
     },
     {
       k: 'Channel B · coherence head',
       v: 'For each adjacent clause pair (u, v), the feature vector [u, v, |u−v|, u·v] (4 × 768) goes through an MLP: Linear 3072→256 · LayerNorm · ReLU · Dropout 0.2 → Linear 256→64 · ReLU · Dropout → Linear 64→1 · sigmoid. Transition anomaly = 1 − P(coherent).',
-      src: 'src/coherence/model.py · src/scoring/channel_b.py',
     },
     {
       k: 'Head training (recorded run)',
       v: 'Binary cross-entropy (BCEWithLogits), AdamW, learning rate 0.001, batch 32, 12 epochs on 894 clause pairs (716 train / 178 validation) built from SEC EDGAR contracts with positive, easy-negative and hard-negative pairs.',
-      src: 'train_coherence_model.py · src/coherence/trainer.py · fixtures/coherence_training_curves.json',
     },
     {
       k: 'Ensemble & severity',
       v: 'Combined score = α·A + (1−α)·B with α = 0.5; tiers HIGH / MEDIUM / LOW / CLEAN using thresholds 0.75 / 0.50 (marked as targets in config), cross-channel agreement and conformal interval width.',
-      src: 'src/scoring/pipeline.py · src/scoring/severity.py · src/config.py',
     },
     {
       k: 'Calibration',
       v: 'Split-conformal intervals (crepes) fitted only on synthetic same-document shuffles: 108 calibration samples, target coverage 0.9.',
-      src: 'src/calibration/conformal.py · fixtures/conformal_calibration_fixture.json',
     },
   ],
 
-  /** What the application does (README "Features"). */
+  /** What the application does. */
   features: [
     { title: 'Ingestion', text: 'TXT, PDF and DOCX input with bounded parsing, a clause preview, and consistent clause identities and source spans.' },
     { title: 'Inference on local CPU', text: 'Frozen Legal-BERT embeddings, LEDGAR-derived semantic centroids (Channel A), learned adjacent-clause compatibility (Channel B), severity ranking and synthetic-shuffle conformal calibration.' },
@@ -244,11 +220,11 @@ export const project = {
     { title: 'Review & reporting', text: 'Encrypted saved analyses (Fernet), history, clause review, analytics, PDF/DOCX reports and reviewer feedback.' },
   ],
 
-  /** Repository maturity — shown inside the technical section, not as the headline. */
-  repositoryStatus: {
-    line: 'Repository status: demo-ready with documented limitations — not production-ready.',
+  /** Project maturity — shown inside the technical section, not as the headline. */
+  projectStatus: {
+    line: 'Project status: demo-ready with known limitations — not production-ready.',
     detail:
-      'The README labels the application DEMO_READY_WITH_LIMITATIONS. The 28 Oct 2026 research freeze classifies it as a reproducible native research prototype with explicit limits. Docker runtime for that latest revision is recorded as unverified, and general distant-clause contradiction detection remains NO-GO.',
+      'LexAudit is classed as demo-ready with limitations. The final research freeze (28 Oct 2026) classifies it as a reproducible native research prototype with explicit limits. Docker runtime for that latest revision is recorded as unverified, and general distant-clause contradiction detection remains NO-GO.',
   },
 
   verification: {
@@ -262,10 +238,9 @@ export const project = {
     ],
     caveat:
       'Counts overlap and are not summed. No legal-accuracy claim is made: model scores and synthetic conformal bounds are exploratory signals, not calibrated probabilities of legal defects.',
-    source: 'README · docs/FINAL_SOURCE_PARSING_AND_RESEARCH_FREEZE.md · docs/PERSONAL_MAIN_RELEASE_2026_11_01.md',
   },
 
-  /** From docs/RESEARCH_VALIDITY_STATUS.md — external validation still outstanding. */
+  /** External validation still outstanding. */
   validity: {
     statement: 'Application functionality and scientific validity are treated separately. Historical development metrics are labelled exploratory; they are not legal accuracy estimates.',
     blockers: [
@@ -287,55 +262,55 @@ export const project = {
   ],
 
   /* ───────────────────────── 05 · Complete tech stack ───────────────────────── */
-  /** `items: []` renders a placeholder row. Every filled item is in the repo. */
+  /** Rows with `items: []` are hidden. Every filled item is used by LexAudit. */
   techStack: [
-    { category: 'Programming languages', items: ['Python 3.11', 'TypeScript 5', 'CSS'], source: 'README · Dockerfile.backend · frontend/package.json' },
-    { category: 'Frontend', items: ['Next.js 16.4.3 (App Router)', 'React 19.3', 'lucide-react'], source: 'frontend/package.json' },
-    { category: 'Backend', items: ['FastAPI', 'Uvicorn', 'Pydantic', 'python-multipart', 'HTTPX', 'cryptography (Fernet)'], source: 'requirements.txt' },
-    { category: 'NLP libraries', items: ['Hugging Face Transformers 5.15.1', 'sentence-transformers 6.0.0', 'spaCy 3.8.15', 'dateparser', 'Hugging Face datasets', 'pdfplumber', 'python-docx', 'defusedxml'], source: 'requirements.txt · requirements-release.txt' },
-    { category: 'ML models', items: ['Legal-BERT (nlpaueb/legal-bert-base-uncased, frozen)', 'Coherence head (models/coherence_classifier.pt)', 'LEDGAR clause-type centroids', 'scikit-learn', 'MAPIE · crepes (conformal)', 'Captum (attribution)'], source: 'src/config.py · requirements.txt · README' },
-    { category: 'Deep-learning frameworks', items: ['PyTorch 2.13.0 (CPU build)'], source: 'requirements.txt · README' },
-    { category: 'Database & storage', items: ['PostgreSQL 16 (Docker feedback)', 'SQLite (native feedback)', 'Fernet-encrypted file storage', 'Docker named volumes'], source: 'README · docker-compose.yml' },
-    { category: 'Development tools', items: ['pytest 9.1.1', 'ESLint 9', 'TypeScript compiler', 'Git / GitHub'], source: 'requirements.txt · frontend/package.json · README' },
-    { category: 'Deployment infrastructure', items: ['Docker Compose', 'python:3.11-slim-bookworm', 'node:24.13.1-alpine', 'nginx:1.28-alpine', 'postgres:16-alpine', 'Local CPU · loopback-only ports'], source: 'docker-compose.yml · Dockerfile.backend · Dockerfile.frontend' },
+    { category: 'Programming languages', items: ['Python 3.11', 'TypeScript 5', 'CSS'] },
+    { category: 'Frontend', items: ['Next.js 16.4.3 (App Router)', 'React 19.3', 'lucide-react'] },
+    { category: 'Backend', items: ['FastAPI', 'Uvicorn', 'Pydantic', 'python-multipart', 'HTTPX', 'cryptography (Fernet)'] },
+    { category: 'NLP libraries', items: ['Hugging Face Transformers 5.15.1', 'sentence-transformers 6.0.0', 'spaCy 3.8.15', 'dateparser', 'Hugging Face datasets', 'pdfplumber', 'python-docx', 'defusedxml'] },
+    { category: 'ML models', items: ['Legal-BERT (nlpaueb/legal-bert-base-uncased, frozen)', 'Coherence head (small MLP classifier)', 'LEDGAR clause-type centroids', 'scikit-learn', 'MAPIE · crepes (conformal)', 'Captum (attribution)'] },
+    { category: 'Deep-learning frameworks', items: ['PyTorch 2.13.0 (CPU build)'] },
+    { category: 'Database & storage', items: ['PostgreSQL 16 (Docker feedback)', 'SQLite (native feedback)', 'Fernet-encrypted file storage', 'Docker named volumes'] },
+    { category: 'Development tools', items: ['pytest 9.1.1', 'ESLint 9', 'TypeScript compiler', 'Git / GitHub'] },
+    { category: 'Deployment infrastructure', items: ['Docker Compose', 'python:3.11-slim-bookworm', 'node:24.13.1-alpine', 'nginx:1.28-alpine', 'postgres:16-alpine', 'Local CPU · loopback-only ports'] },
   ],
   // TODO(lavan): optional note on the stack in your own words.
   techStackNote: PLACEHOLDER as Editable,
 
   /* ───────────────────────── 06 · Datasets used ───────────────────────── */
-  /** Each field is filled only where the repo states it; `PLACEHOLDER` otherwise. */
+  /** Each field is filled only where the facts are known; `PLACEHOLDER` otherwise. */
   datasets: [
     {
       name: 'LEDGAR (via LexGLUE)',
       source: 'Hugging Face lex_glue dataset, ledgar config (Tuggener et al., 2020).',
       size: 'About 60,000 labelled contract provisions from SEC EDGAR filings.',
-      format: 'Hugging Face dataset with train / validation / test splits, normalised into clause records saved as JSON Lines (src/data/ingest_ledgar.py).',
-      preparation: 'A label-balanced sample of the train split (at most 20 clauses per label, up to 500 clauses) is embedded with frozen Legal-BERT and averaged into unit-normalised clause-type centroids — 66 stored in fixtures/ledgar_centroids.npz (build_centroids.py).',
-      usage: 'Reference centroids for Channel A semantic scoring. The system card also reports exploratory clause-order checks on shuffled LEDGAR provisions.',
+      format: 'Hugging Face dataset with train / validation / test splits, normalised into clause records saved as JSON Lines.',
+      preparation: 'A label-balanced sample of the train split (at most 20 clauses per label, up to 500 clauses) is embedded with frozen Legal-BERT and averaged into unit-normalised clause-type centroids — 66 in total.',
+      usage: 'Reference centroids for Channel A semantic scoring. Exploratory clause-order checks on shuffled LEDGAR provisions were also reported.',
       limitations: 'The LexGLUE card shows CC BY 4.0 metadata but asks for more licensing information; underlying-document terms need separate review. Downloaded at ingestion time, not redistributed.',
     },
     {
       name: 'SEC EDGAR EX-10 contracts',
-      source: 'Public SEC EDGAR full-text search of 10-K filings, from which EX-10.x material-contract exhibits are downloaded (src/data/ingest_edgar.py).',
-      size: 'System card: 50 clean, executed commercial agreements for false-positive estimation. Coherence-head training used 894 clause pairs from these contracts.',
-      format: 'Exhibit text files in a git-ignored data/raw/sec_edgar/ folder, with a metadata-only manifest (URL, filing date, accession number).',
-      preparation: 'HTML is stripped by the rule-based segmenter; contracts with 5–50 clauses are kept and turned into positive (consecutive), easy-negative (cross-document) and hard-negative (same-document) clause pairs (train_coherence_model.py, src/coherence/pair_sampler.py).',
+      source: 'Public SEC EDGAR full-text search of 10-K filings, from which EX-10.x material-contract exhibits are downloaded.',
+      size: '50 clean, executed commercial agreements for false-positive estimation. Coherence-head training used 894 clause pairs from these contracts.',
+      format: 'Plain-text exhibit files kept locally, with a metadata-only manifest (URL, filing date, accession number).',
+      preparation: 'HTML is stripped by the rule-based segmenter; contracts with 5–50 clauses are kept and turned into positive (consecutive), easy-negative (cross-document) and hard-negative (same-document) clause pairs.',
       usage: 'Training and validation of the Channel B coherence head; false-positive-rate estimation.',
-      limitations: 'Public filing access is not a blanket copyright grant; raw filings are excluded from Git and need per-document rights review. Requests stay under SEC rate limits.',
+      limitations: 'Public filing access is not a blanket copyright grant; raw filings are not redistributed and need per-document rights review. Requests stay under SEC rate limits.',
     },
     {
       name: 'CUAD',
-      source: 'Contract Understanding Atticus Dataset — The Atticus Project (Hendrycks et al., 2021); CUAD_v1.json from the Atticus Hugging Face repository.',
+      source: 'Contract Understanding Atticus Dataset — The Atticus Project (Hendrycks et al., 2021); the canonical CUAD v1 JSON release from The Atticus Project on Hugging Face.',
       size: '510 contracts with 13,000+ expert annotations across 41 clause types.',
       format: 'SQuAD-style question-answering JSON (about 40 MB).',
-      preparation: 'Downloaded as the canonical JSON and checked for clause order by src/data/ingest_cuad.py.',
+      preparation: 'Downloaded as the canonical JSON and checked for whether clause order is preserved.',
       usage: 'Out-of-distribution evaluation corpus.',
-      limitations: 'CC BY 4.0 — attribution required. Not bundled; the optional CUAD order report is absent, which is why two tests are skipped.',
+      limitations: 'CC BY 4.0 — attribution required. Not bundled with the application; two optional CUAD-dependent tests are skipped for this reason.',
     },
     {
       name: 'Synthetic shuffle calibration set',
-      source: 'Generated by the project from same-document reorderings (src/calibration/synthetic_generator.py).',
-      size: '108 calibration samples in fixtures/conformal_calibration_fixture.json.',
+      source: 'Generated by the project from same-document reorderings.',
+      size: '108 calibration samples.',
       format: 'JSON calibration state (residuals, quantile, target coverage).',
       preparation: 'Clean orderings plus block shuffles, reversed pairs and full permutations within the same document.',
       usage: 'Fitting the split-conformal calibrator used to attach intervals to combined scores.',
@@ -353,39 +328,56 @@ export const project = {
   // TODO(lavan): anything about the data in your own words (e.g. what you learned working with legal text).
   datasetsNote: PLACEHOLDER as Editable,
 
-  /* ───────────── 07 · Prompts used for construction of the website ───────────── */
-  promptsNote:
-    'These are the prompts used to build this portfolio website. They are not prompts inside the LexAudit NLP system — LexAudit’s default inference uses local models (Legal-BERT and a small coherence head), and its data-governance notes state that no paid LLM API is used for core inference.',
+  /* ───────────────── 07 · Prompts used in building LexAudit ───────────────── */
+  /**
+   * Development activities on the LexAudit application that were driven by
+   * numbered prompt / AI-agent task instructions (evidence verified in the
+   * LexAudit project history; listed in the V4 report, not on the page).
+   * No prompt text is shown, by design.
+   */
+  promptsIntro:
+    'LexAudit was built in a sequence of structured prompts, each scoped to one stage of the system and ending with a verified handoff before the next began. The most significant of these are summarised below.',
   prompts: [
     {
-      title: 'MASTER PROMPT: BUILD, DEPLOY AND ITERATIVELY IMPROVE MY NLP PORTFOLIO',
-      version: 'Version 1',
-      purpose: 'Create, deploy and iteratively improve the CSI4001 NLP portfolio website.',
-      summary: 'Asked an AI agent to build this portfolio, deploy it, and keep improving it.',
-      // TODO(lavan): paste the full prompt text.
-      actualPrompt: PLACEHOLDER as Editable,
-      tool: 'Hark (AI agent)',
-      generated: 'Version 1 of this site: the cover plus About Me, My Project, My Learning and Projects That Made Me Think pages (Vite, React, TypeScript, Tailwind CSS, Framer Motion), deployed on Vercel.',
-      // TODO(lavan): what you changed after generation.
-      changesAfter: PLACEHOLDER as Editable,
+      title: 'Setting up the foundations',
+      aim: 'Establish a reproducible development environment and acquire the legal corpora the system would depend on.',
+      outcome: 'A pinned, verified Python environment and ingestion of the LEDGAR, SEC EDGAR and CUAD data, including the finding that CUAD does not preserve clause order.',
     },
     {
-      title: 'UPDATE EXISTING NLP PORTFOLIO – VERSION 2',
-      version: 'Version 2',
-      purpose: 'Update the existing site without redesigning it.',
-      summary: 'Asked for a ten-section project write-up, a presentation gallery and button, and About page updates (fact sheet, LinkedIn and email, and editable How I Learn and Future Aspirations fields), with no invented content.',
-      // TODO(lavan): paste the full prompt text.
-      actualPrompt: PLACEHOLDER as Editable,
-      tool: 'Hark (AI agent)',
-      generated: 'This version: the restructured project page, the presentation gallery with a lightbox, the presentation button and the About page changes.',
-      // TODO(lavan): what you changed after generation.
-      changesAfter: PLACEHOLDER as Editable,
+      title: 'Building the clause-coherence pipeline',
+      aim: 'Turn raw contract text into scored clauses: segmentation, frozen Legal-BERT embeddings, a learned adjacent-clause coherence model and dual-channel anomaly scoring.',
+      outcome: 'The core analysis engine, later extended with synthetic-shuffle conformal calibration and a decision-support severity ranking of HIGH, MEDIUM, LOW and CLEAN.',
     },
-  ],
+    {
+      title: 'Adding rule checks and explanations',
+      aim: 'Complement the neural scores with rule-based checks for cross-references and dates, and make every flag explainable.',
+      outcome: 'A reference and date-logic checker merged into one flag pipeline, with Integrated Gradients attributions, neighbour sensitivity and nearest-neighbour evidence for each finding.',
+    },
+    {
+      title: 'Integrating the backend and inference service',
+      aim: 'Expose the analysis pipeline to a web client safely, without blocking the server during long-running analyses.',
+      outcome: 'A FastAPI service with an asynchronous job queue and feedback endpoint, hardened with API-key authentication, rate limiting, encryption at rest and 24-hour retention.',
+    },
+    {
+      title: 'Designing the web application',
+      aim: 'Give reviewers a clear interface for the full journey, from privacy acknowledgement and upload through results, explanations and feedback.',
+      outcome: 'A Next.js frontend, later redesigned in stages into a professional workspace with light and dark themes, a split-screen clause review view, analytics and an explainability workspace.',
+    },
+    {
+      title: 'Extending the contract analysis features',
+      aim: 'Add research tools that test and act on the coherence signals without ever editing the contract.',
+      outcome: 'Counterfactual clause-position suggestions that abstain on clean documents, and an opt-in Robustness Lab that applies controlled perturbations and negative controls.',
+    },
+    {
+      title: 'Testing, debugging and refinement',
+      aim: 'Audit the integrated system end to end, diagnose defects and confirm it was ready for demonstration.',
+      outcome: 'A regression audit that diagnosed twelve defects, followed by targeted repairs, an authorization fix, a full acceptance review and accessibility improvements.',
+    },
+  ] as { title: string; aim: string; outcome: string }[],
 
   /* ───────────────────────── 08 · NLP pipeline ───────────────────────── */
   /**
-   * The eight requested stages mapped to what the repo actually does.
+   * The eight requested stages mapped to what LexAudit actually does.
    * `present: false` = not a separate stage in LexAudit's own code.
    */
   pipeline: [
@@ -393,7 +385,7 @@ export const project = {
       id: 'input',
       label: 'Input',
       present: true,
-      component: 'src/api/ingestion.py · src/api/upload_limits.py',
+      component: 'Upload validation · size limits',
       text: 'A contract is uploaded as TXT, PDF or DOCX (max 10 MB). Any other extension is refused, and the upload body is size-checked before it is parsed.',
     },
     {
@@ -407,7 +399,7 @@ export const project = {
       id: 'preprocess',
       label: 'Text preprocessing',
       present: true,
-      component: 'RuleBasedSegmenter (src/segmentation/rule_based.py) · src/structure/parser.py',
+      component: 'RuleBasedSegmenter · structural parser',
       text: 'HTML tags are stripped and entities unescaped. The text is split into clauses with regular expressions for “Section/Article” headings, numbered items, (a)/(i) markers and all-caps headings. Each clause keeps an identity and its source span (max 500 clauses). A separate structural parser reads headings and citations from the unchanged text.',
     },
     {
@@ -415,13 +407,13 @@ export const project = {
       label: 'Tokenization',
       present: false,
       component: 'Inside Legal-BERT’s tokenizer (via sentence-transformers) · spaCy in the reference checker',
-      text: 'There is no separate tokenization stage in LexAudit’s own code. Subword (WordPiece) tokenization and truncation happen inside the Legal-BERT tokenizer when clauses are encoded. The reference checker uses spaCy. The frontend groups word-pieces back into whole words when it displays Integrated Gradients attributions (frontend/src/components/explainability/wordpieceGrouping.ts).',
+      text: 'There is no separate tokenization stage in LexAudit’s own code. Subword (WordPiece) tokenization and truncation happen inside the Legal-BERT tokenizer when clauses are encoded. The reference checker uses spaCy. The frontend groups word-pieces back into whole words when it displays Integrated Gradients attributions.',
     },
     {
       id: 'represent',
       label: 'Feature representation',
       present: true,
-      component: 'FrozenLegalBERTEmbedder (src/embeddings/frozen.py)',
+      component: 'FrozenLegalBERTEmbedder',
       text: 'Each clause becomes a 768-dimensional vector from frozen Legal-BERT (weights not updated), normalised for cosine similarity and cached so identical clauses are not re-encoded.',
     },
     {
@@ -435,14 +427,14 @@ export const project = {
       id: 'coherence',
       label: 'Coherence analysis',
       present: true,
-      component: 'SeverityRanker · ConformalCalibrator · CrossReferenceChecker · temporal analysis · src/xai',
+      component: 'SeverityRanker · ConformalCalibrator · CrossReferenceChecker · temporal analysis · explanation layer',
       text: 'Severity tiers (HIGH / MEDIUM / LOW / CLEAN) come from the combined score, cross-channel agreement and conformal interval width. Rule checks look for dangling cross-references and date conflicts. An opt-in dependency graph checks “above/below” references. Integrated Gradients and neighbor sensitivity explain scores, and counterfactual repositioning suggests a position or abstains.',
     },
     {
       id: 'output',
       label: 'Output generation',
       present: true,
-      component: 'UnifiedAuditReport · src/api/storage.py · src/api/reports.py',
+      component: 'UnifiedAuditReport · encrypted storage · report export',
       text: 'Results are saved as an encrypted snapshot marked REVIEW_REQUIRED or NO_FINDINGS, shown in the review UI, and exported as PDF (ReportLab) or DOCX (python-docx) reports that carry a decision-support disclaimer.',
     },
   ],
@@ -450,9 +442,9 @@ export const project = {
   /* ───────────────────── 09 · Users, inputs and outputs ───────────────────── */
   users: {
     intended: [
-      { who: 'Academic and research evaluators', why: 'Primary intended use: academic and research evaluation of contract structure, clause-order anomalies, missing standard terms and dangling internal references (docs/system_card.md).' },
-      { who: 'Human reviewers', why: 'Outputs are research decision support; a reviewer stays in charge and can leave feedback on flags (README).' },
-      { who: 'Faculty and project evaluators', why: 'Audience named in the demo guide (demo_ready/FINAL_DEMO_README.md).' },
+      { who: 'Academic and research evaluators', why: 'Primary intended use: academic and research evaluation of contract structure, clause-order anomalies, missing standard terms and dangling internal references.' },
+      { who: 'Human reviewers', why: 'Outputs are research decision support; a reviewer stays in charge and can leave feedback on flags.' },
+      { who: 'Faculty and project evaluators', why: 'The project’s demonstration materials were prepared for faculty and project evaluators.' },
     ],
     outOfScope: [
       'Automated contract execution or autonomous legal advisory decisions.',
@@ -480,12 +472,12 @@ export const project = {
     { k: 'Suggested position', v: 'Counterfactual repositioning with evidence, or abstention. Edits are never applied.' },
     { k: 'Reports', v: 'PDF and DOCX reports generated from saved results, including empty and uncertain outcomes; encrypted history.' },
   ],
-  /** Drawn from the repo's synthetic demo file and the documented demo result. */
+  /** A synthetic demonstration contract and its documented result. */
   example: {
-    inputLabel: 'demo_ready/LexAudit_Broken_Directional_Reference.txt (fictional, synthetic)',
+    inputLabel: 'Synthetic demonstration contract (fictional)',
     input:
       'Section 2. Advance Payment\nUnder Section 4 above, Example Party A must issue the payment notice before funds are transferred. …\n\nSection 4. Payment Notice\nExample Party A shall send a written payment notice confirming the amount and the due date.',
-    outputLabel: 'Documented result · experimental dependency graph (demo_ready/FINAL_DEMO_README.md)',
+    outputLabel: 'Result · experimental dependency graph',
     output: [
       { k: 'Status', v: 'FINDING' },
       { k: 'Reference', v: '“Section 4 above”' },
@@ -497,7 +489,7 @@ export const project = {
   },
 
   /* ───────────────────────── 10 · References ───────────────────────── */
-  /** Each URL checked (HTTP 200) on 1 Nov 2026. `usedFor` says where the repo relies on it. */
+  /** Each URL checked (HTTP 200) on 1 Nov 2026. `usedFor` says where LexAudit relies on it. */
   references: [
     { cite: 'Chalkidis, I., Fergadiotis, M., Malakasiotis, P., Aletras, N., & Androutsopoulos, I. (2020). LEGAL-BERT: The Muppets straight out of Law School. In Findings of the Association for Computational Linguistics: EMNLP 2020 (pp. 2898–2904).', url: 'https://aclanthology.org/2020.findings-emnlp.261/', usedFor: 'Encoder' },
     { cite: 'nlpaueb. (n.d.). legal-bert-base-uncased [Model card]. Hugging Face.', url: 'https://huggingface.co/nlpaueb/legal-bert-base-uncased', usedFor: 'Encoder weights (CC BY-SA 4.0)' },
