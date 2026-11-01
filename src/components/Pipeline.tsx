@@ -88,7 +88,7 @@ export function PipelineDiagram() {
           </motion.div>
         </AnimatePresence>
       </div>
-      <p className="mt-3 font-mono text-[11px] text-ink-mute">Click a stage, or use arrow keys to move through the pipeline. Component names are files and classes in the repository.</p>
+      <p className="mt-3 font-mono text-[11px] text-ink-mute">Click a stage, or use arrow keys to move through the pipeline. Each stage lists the main components and libraries involved.</p>
     </div>
   );
 }
