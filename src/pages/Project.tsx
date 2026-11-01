@@ -3,7 +3,7 @@ import { ArrowUpRight, AlertTriangle, Presentation, ChevronDown, ArrowRight } fr
 import Page from '../components/Page';
 import SectionToc from '../components/SectionToc';
 import NextChapter from '../components/NextChapter';
-import { EditableText, Reveal } from '../components/Bits';
+import { EditableText, Reveal, hasText } from '../components/Bits';
 import { ArchitectureDiagram, PipelineDiagram } from '../components/Pipeline';
 import { ImageSlotView, PresentationGallery } from '../components/PresentationGallery';
 import { project } from '../content/project';
@@ -144,7 +144,7 @@ export default function Project() {
               <h2 id="presentation-h" className="font-serif text-3xl md:text-4xl">{p.gallery.title}</h2>
               <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-ink-mute">Plate I · click to enlarge</p>
             </div>
-            {p.gallery.intro && <p className="mb-6 max-w-2xl text-ivory/80">{p.gallery.intro}</p>}
+            {hasText(p.gallery.intro) && <p className="mb-6 max-w-2xl text-ivory/80">{p.gallery.intro}</p>}
             <PresentationGallery images={p.gallery.images} />
           </div>
         </Reveal>
@@ -158,48 +158,88 @@ export default function Project() {
           {/* 01 */}
           <Section id="title" num="01" title={p.title} kicker="Title">
             <div className="grid gap-8 md:grid-cols-12">
-              <div className="md:col-span-5">
-                <p className="label mb-3 text-ink-mute">Short summary · from the README</p>
+              <div className={hasText(p.fullDescription) ? 'md:col-span-5' : 'md:col-span-9'}>
+                <p className="label mb-3 text-ink-mute">Summary · from the README</p>
                 <p className="text-lg leading-relaxed text-ivory/85">{p.summary}</p>
+                <p className="mt-4 font-mono text-[11px] text-ink-mute">Team project · {p.team.map((t) => t.handle).join(' & ')} · CSI4001</p>
+                <dl className="mt-8 divide-y divide-ivory/10 border-y border-ivory/10">
+                  {p.glance.map((g) => (
+                    <div key={g.k} className="grid gap-1 py-3 sm:grid-cols-[8rem_1fr] sm:gap-4">
+                      <dt className="label pt-0.5 text-sage">{g.k}</dt>
+                      <dd className="text-sm leading-relaxed text-ivory/85">{g.v}</dd>
+                    </div>
+                  ))}
+                </dl>
               </div>
-              <div className="md:col-span-7">
-                <p className="label mb-3 text-ink-mute">Full description</p>
-                <EditableText value={p.fullDescription} hint="Add the full project description here" className="text-ivory/80" textClass="text-[17px] leading-relaxed text-ivory/85" />
-              </div>
+              {hasText(p.fullDescription) && (
+                <div className="md:col-span-7">
+                  <p className="label mb-3 text-ink-mute">Full description</p>
+                  <EditableText value={p.fullDescription} textClass="text-[17px] leading-relaxed text-ivory/85" />
+                </div>
+              )}
             </div>
           </Section>
 
           {/* 02 */}
           <Section id="motivation" num="02" title="Motivation">
             <div className="border-l-2 border-lime pl-6">
-              <EditableText value={p.motivation} hint="Add the motivation behind LexAudit here" className="text-ivory/80" textClass="font-serif text-2xl leading-snug text-ivory md:text-3xl" />
+              <p className="font-serif text-2xl leading-snug text-ivory md:text-3xl">{p.motivationFromRepo.statement}</p>
             </div>
+            <ul className="mt-8 grid gap-px bg-ivory/10 md:grid-cols-2">
+              {p.motivationFromRepo.points.map((pt) => (
+                <li key={pt} className="bg-ink p-5 text-sm leading-relaxed text-ivory/80">{pt}</li>
+              ))}
+            </ul>
+            <p className="mt-3 font-mono text-[11px] text-ink-mute">As stated in the repository: {p.motivationFromRepo.source}.</p>
+            {hasText(p.motivation) && (
+              <div className="mt-10">
+                <p className="label mb-3 text-sage">In our words</p>
+                <EditableText value={p.motivation} textClass="text-[17px] leading-relaxed text-ivory/85" />
+              </div>
+            )}
           </Section>
 
           {/* 03 */}
           <Section id="gap" num="03" title="Existing gap / event that motivated the project">
             <ol className="grid gap-px bg-ivory/10 md:grid-cols-3">
-              {[
-                { k: 'a', t: 'Existing challenges', v: p.gap.existingChallenges },
-                { k: 'b', t: 'Limitations of existing approaches', v: p.gap.limitationsOfExistingApproaches },
-                { k: 'c', t: 'Why our approach is needed', v: p.gap.whyOurApproachIsNeeded },
-              ].map((g) => (
+              {p.gapFromRepo.map((g) => (
                 <li key={g.k} className="flex flex-col bg-ink p-6">
                   <p className="font-serif text-4xl italic text-sage">{g.k}.</p>
-                  <h3 className="mb-4 mt-2 text-sm font-semibold uppercase tracking-wide">{g.t}</h3>
-                  <EditableText value={g.v} hint="Add your text here" className="text-ivory/80" textClass="text-sm leading-relaxed text-ivory/85" />
+                  <h3 className="mb-4 mt-2 text-sm font-semibold uppercase tracking-wide">{g.title}</h3>
+                  <p className="text-sm leading-relaxed text-ivory/85">{g.text}</p>
+                  <p className="mt-auto pt-4 font-mono text-[10px] leading-relaxed text-ink-mute">{g.source}</p>
                 </li>
               ))}
             </ol>
+            <p className="mt-3 font-mono text-[11px] text-ink-mute">Framed from the repository’s own documentation; it does not benchmark LexAudit against other tools.</p>
+            {(() => {
+              const own = [
+                { t: 'Existing challenges', v: p.gap.existingChallenges },
+                { t: 'Limitations of existing approaches', v: p.gap.limitationsOfExistingApproaches },
+                { t: 'Why our approach is needed', v: p.gap.whyOurApproachIsNeeded },
+              ].filter((g) => hasText(g.v));
+              return own.length ? (
+                <dl className="mt-10 divide-y divide-ivory/10 border-y border-ivory/10">
+                  {own.map((g) => (
+                    <div key={g.t} className="grid gap-2 py-4 md:grid-cols-12">
+                      <dt className="label pt-1 text-sage md:col-span-3">{g.t}</dt>
+                      <dd className="md:col-span-9"><EditableText value={g.v} textClass="text-[16px] leading-relaxed text-ivory/85" /></dd>
+                    </div>
+                  ))}
+                </dl>
+              ) : null;
+            })()}
           </Section>
 
           {/* 04 */}
           <Section id="architecture" num="04" title="Architecture">
             <Sub n="4.1" title="System architecture">
               <ArchitectureDiagram />
-              <div className="mt-6">
-                <ImageSlotView image={p.architectureDiagramImage} label="Add architecture diagram" hint="project.ts → architectureDiagramImage" />
-              </div>
+              {p.architectureDiagramImage && (
+                <div className="mt-6">
+                  <ImageSlotView image={p.architectureDiagramImage} />
+                </div>
+              )}
             </Sub>
 
             <Sub n="4.2" title="Components">
@@ -272,11 +312,13 @@ export default function Project() {
               </p>
             </Sub>
 
-            <Sub n="4.6" title="Technical overview">
-              <ImageSlotView image={p.technicalOverviewImage} label="Add technical overview image" hint="project.ts → technicalOverviewImage" />
-            </Sub>
+            {p.technicalOverviewImage && (
+              <Sub n="4.6" title="Technical overview">
+                <ImageSlotView image={p.technicalOverviewImage} />
+              </Sub>
+            )}
 
-            <Sub n="4.7" title="Capabilities, status & verification">
+            <Sub n={p.technicalOverviewImage ? '4.7' : '4.6'} title="Capabilities, status & verification">
               <p className="mb-2 border-l-2 border-lime pl-4 text-ivory/90" data-testid="repo-status">{p.repositoryStatus.line}</p>
               <p className="mb-6 pl-4 text-sm leading-relaxed text-ivory/65">{p.repositoryStatus.detail}</p>
               <div className="border-t border-ivory/10">
@@ -344,19 +386,15 @@ export default function Project() {
                   </tr>
                 </thead>
                 <tbody>
-                  {p.techStack.map((g) => (
+                  {p.techStack.filter((g) => g.items.length > 0).map((g) => (
                     <tr key={g.category} className="border-b border-ivory/10 align-top">
                       <th scope="row" className="w-[34%] py-4 pr-4 font-mono text-[11px] font-normal uppercase tracking-wider text-sage md:w-auto md:text-xs">{g.category}</th>
                       <td className="py-4 pr-4">
-                        {g.items.length ? (
-                          <ul className="flex flex-wrap gap-2">
-                            {g.items.map((it) => (
-                              <li key={it} className="max-w-full break-words border border-ivory/20 px-2 py-0.5 font-mono text-xs">{it}</li>
-                            ))}
-                          </ul>
-                        ) : (
-                          <EditableText value="" hint="Add technologies" />
-                        )}
+                        <ul className="flex flex-wrap gap-2">
+                          {g.items.map((it) => (
+                            <li key={it} className="max-w-full break-words border border-ivory/20 px-2 py-0.5 font-mono text-xs">{it}</li>
+                          ))}
+                        </ul>
                         <span className="mt-2 block font-mono text-[10px] text-ink-mute md:hidden">{g.source}</span>
                       </td>
                       <td className="hidden py-4 font-mono text-[10px] leading-relaxed text-ink-mute md:table-cell">{g.source}</td>
@@ -365,9 +403,7 @@ export default function Project() {
                 </tbody>
               </table>
             </div>
-            <div className="mt-6">
-              <EditableText value={p.techStackNote} hint="Optional: add a note on the stack in your own words" />
-            </div>
+            <EditableText value={p.techStackNote} className="mt-6" textClass="text-[16px] leading-relaxed text-ivory/85" />
           </Section>
 
           {/* 06 */}
@@ -385,22 +421,20 @@ export default function Project() {
                         ['Training / evaluation usage', d.usage],
                         ['Limitations', d.limitations],
                       ] as const
-                    ).map(([k, v]) => (
-                      <div key={k} className="bg-ink p-4">
-                        <dt className="label mb-2 text-ink-mute">{k}</dt>
-                        <dd>
-                          <EditableText value={v} hint="Add detail" textClass="text-sm leading-relaxed text-ivory/85" />
-                        </dd>
-                      </div>
-                    ))}
+                    )
+                      .filter(([, v]) => hasText(v))
+                      .map(([k, v]) => (
+                        <div key={k} className="bg-ink p-4">
+                          <dt className="label mb-2 text-ink-mute">{k}</dt>
+                          <dd className="text-sm leading-relaxed text-ivory/85">{v}</dd>
+                        </div>
+                      ))}
                   </dl>
                 </Expand>
               ))}
             </div>
             <p className="mt-4 font-mono text-[11px] text-ink-mute">From docs/data_governance.md, docs/system_card.md, docs/THIRD_PARTY_NOTICES.md and the ingestion scripts. Raw datasets are not stored in the repository.</p>
-            <div className="mt-6">
-              <EditableText value={p.datasetsNote} hint="Optional: add your own notes on the data" />
-            </div>
+            <EditableText value={p.datasetsNote} className="mt-6" textClass="text-[16px] leading-relaxed text-ivory/85" />
           </Section>
 
           {/* 07 */}
@@ -420,20 +454,22 @@ export default function Project() {
                   <dl className="divide-y divide-ivory/10 border-y border-ivory/10 md:col-span-8">
                     {(
                       [
-                        ['Purpose', pr.purpose, ''],
-                        ['Actual prompt', pr.actualPrompt, 'Paste the full prompt text here'],
-                        ['Tool used', pr.tool, ''],
-                        ['What it generated', pr.generated, ''],
-                        ['Changes made after generation', pr.changesAfter, 'Add the changes you made here'],
+                        ['Purpose', pr.purpose],
+                        ['Actual prompt', pr.actualPrompt],
+                        ['Tool used', pr.tool],
+                        ['What it generated', pr.generated],
+                        ['Changes made after generation', pr.changesAfter],
                       ] as const
-                    ).map(([k, v, hint]) => (
-                      <div key={k} className="grid gap-2 py-3 sm:grid-cols-[11rem_1fr]">
-                        <dt className="label pt-0.5 text-ink-mute">{k}</dt>
-                        <dd>
-                          <EditableText value={v} hint={hint || 'Add detail'} textClass={`text-sm leading-relaxed text-ivory/85 ${k === 'Actual prompt' ? 'whitespace-pre-wrap font-mono text-xs' : ''}`} />
-                        </dd>
-                      </div>
-                    ))}
+                    )
+                      .filter(([, v]) => hasText(v))
+                      .map(([k, v]) => (
+                        <div key={k} className="grid gap-2 py-3 sm:grid-cols-[11rem_1fr]">
+                          <dt className="label pt-0.5 text-ink-mute">{k}</dt>
+                          <dd>
+                            <EditableText value={v} textClass={`text-sm leading-relaxed text-ivory/85 ${k === 'Actual prompt' ? 'whitespace-pre-wrap font-mono text-xs' : ''}`} />
+                          </dd>
+                        </div>
+                      ))}
                   </dl>
                 </li>
               ))}
@@ -469,9 +505,7 @@ export default function Project() {
                   </ul>
                 </div>
               </div>
-              <div className="mt-6">
-                <EditableText value={p.users.note} hint="Optional: who you think would benefit" />
-              </div>
+              <EditableText value={p.users.note} className="mt-6" textClass="text-[16px] leading-relaxed text-ivory/85" />
             </Sub>
 
             <Sub n="9.2" title="Inputs">
@@ -525,9 +559,7 @@ export default function Project() {
                   </dl>
                 </figure>
               </div>
-              <div className="mt-6">
-                <EditableText value={p.example.ownExample} hint="Optional: add an example from your own run" />
-              </div>
+              <EditableText value={p.example.ownExample} className="mt-6" textClass="text-[16px] leading-relaxed text-ivory/85" />
             </Sub>
           </Section>
 

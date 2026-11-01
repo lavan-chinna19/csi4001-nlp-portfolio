@@ -2,6 +2,7 @@ import { ArrowUpRight } from 'lucide-react';
 import Page from '../components/Page';
 import ConnectionMap from '../components/ConnectionMap';
 import SectionToc from '../components/SectionToc';
+import NextChapter from '../components/NextChapter';
 import { Reflection, Reveal, DraftTag } from '../components/Bits';
 import { exhibits, type Exhibit } from '../content/exhibits';
 import { mapConcepts } from '../content/conceptMap';
@@ -109,6 +110,8 @@ export default function Exhibits() {
           ))}
         </div>
       </div>
+
+      <NextChapter to="/contributions" num="05" label="Classroom Contributions" dark />
     </Page>
   );
 }

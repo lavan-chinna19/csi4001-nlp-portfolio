@@ -3,7 +3,6 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import Page from '../components/Page';
 import ArcSentence from '../components/ArcSentence';
-import { Ph } from '../components/Bits';
 import { site } from '../content/site';
 
 export default function Cover() {
@@ -41,7 +40,7 @@ export default function Cover() {
         {/* tagline, name, registration, CTA */}
         <motion.div {...up(0.55)} className="mt-6 grid gap-6 border-t border-ivory/15 pt-6 md:grid-cols-12 md:items-end">
           <p className="font-serif text-2xl italic leading-snug text-sage md:col-span-5 md:text-3xl">
-            {site.tagline ? site.tagline : <Ph text={site.taglinePlaceholder} />}
+            {site.tagline}
           </p>
           <div className="md:col-span-4">
             <p className="font-serif text-4xl leading-none sm:text-5xl">{site.name}</p>
