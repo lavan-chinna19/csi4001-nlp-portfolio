@@ -2,7 +2,7 @@
 
 *An Exploration of Natural Language Processing and Computational Linguistics.*
 
-An interactive academic portfolio for **CSI4001 · Natural Language Processing and Computational Linguistics** (4 credits, 45 lecture hours) by **Lavan Kumar** (Reg. no. 23MID0108), Data Science, VIT Vellore. It is designed as a digital magazine: a cover, then four chapters.
+An interactive academic portfolio for **CSI4001 · Natural Language Processing and Computational Linguistics** (4 credits, 45 lecture hours) by **Lavan Kumar** (Reg. no. 23MID0108), Data Science, VIT Vellore. It is designed as a digital magazine: a cover, then five chapters.
 
 | Route | Page | Character |
 | --- | --- | --- |
@@ -11,6 +11,7 @@ An interactive academic portfolio for **CSI4001 · Natural Language Processing a
 | `/project` | My Project — LexAudit case file, interactive pipeline + architecture | charcoal technical file |
 | `/learning` | My Learning — *How my understanding of language changed*, 8 modules, 10 live demos | charcoal header + ivory notebook |
 | `/exhibits` | Projects That Made Me Think — 9 real NLP projects + connection map | charcoal gallery, lime highlights |
+| `/contributions` | Classroom Contributions — *Beyond the Classroom*: stars and recognition received in CSI4001 classes | charcoal header + ivory journal |
 | `*` | 404 | charcoal |
 
 **Stack:** React 18 · TypeScript · Vite 5 · Tailwind CSS 3 · Framer Motion · lucide-react · react-router-dom. No other UI libraries. Fonts (Instrument Serif, Manrope, IBM Plex Mono — SIL OFL) are self-hosted in `public/fonts/`.
@@ -29,6 +30,7 @@ csi4001-nlp-portfolio/
 │   ├── fonts/              # self-hosted woff2 files
 │   └── images/
 │       ├── project/*.webp               # LexAudit presentation photos (gallery)
+│       ├── contributions/               # evidence images for Classroom Contributions
 │       └── exhibits/*.webp              # GitHub OpenGraph cards of each repo
 └── src/
     ├── content/            # ALL text lives here — edit these, not the UI
@@ -37,13 +39,14 @@ csi4001-nlp-portfolio/
     │   ├── project.ts      # LexAudit case study (facts from the repo docs only)
     │   ├── syllabus.ts     # 8 CSI4001 modules → concepts → reflections + demo ids
     │   ├── exhibits.ts     # 9 external projects
+    │   ├── contributions.ts # Classroom Contributions entries + categories (instructions inside)
     │   ├── conceptMap.ts   # concepts for the connection map (+ module links)
     │   └── types.ts        # Reflection type + draft() helper
     ├── components/         # Layout, Page, SectionToc, ArcSentence, Pipeline, ConnectionMap…
     ├── demos/              # 10 in-browser demos (lazy-loaded)
     ├── lib/                # porter.ts (Porter stemmer), nlp.ts (edit distance, bigram LM,
     │                       #   CFG parser, toy POS tagger, sentiment, summarizer), text.ts
-    ├── pages/              # Cover, About, Project, Learning, Exhibits, NotFound
+    ├── pages/              # Cover, About, Project, Learning, Exhibits, Contributions, NotFound
     ├── fonts.css · index.css · App.tsx · main.tsx
 ```
 
@@ -68,24 +71,25 @@ Everything you read on the site comes from `src/content/`. The UI never needs to
 - **Add a map concept:** add it to `conceptMap.ts` (and to the `ConceptId` union); set `module` to a syllabus module id or `null`.
 - **Page titles/descriptions:** `pageMeta` in `site.ts`.
 
-## Replacing placeholders
+## Optional fields (nothing renders until filled)
 
-Two kinds of placeholder exist:
-
-- **`PLACEHOLDER` fields (Version 2).** Editable fields set to the `PLACEHOLDER` constant (an empty string, defined in `src/content/types.ts`) render as a subtle dashed **“Add your … here”** box. Replace `PLACEHOLDER` with your own text and the box disappears. Every one is marked with a `TODO(lavan)` comment — search for it.
-- **`[square brackets]`** in older text render with a dashed outline.
+The site never shows placeholder boxes. Optional fields are set to the `PLACEHOLDER` constant (an empty string, `src/content/types.ts`) and are simply **not rendered** while empty. Fill one in and it appears automatically. Every one is marked with a `TODO(lavan)` comment — search for it.
 
 | What | Where |
 | --- | --- |
-| How I Learn (5 sub-sections), Future Aspirations (5 fields) | `about.ts` → `howILearn.blocks[].body`, `aspirations.fields[].body` |
-| LinkedIn, email, GitHub | `about.ts` → `contact` (site footer reads the same values via `site.ts`; `mailto:` is added for email) |
-| Project: full description, motivation, gap (3 fields) | `project.ts` → `fullDescription`, `motivation`, `gap` |
+| LinkedIn, email, GitHub | `about.ts` → `contact` (shown in the About fact sheet and the site footer; `mailto:` is added for email) |
+| Future Aspirations wording | `about.ts` → `aspirations.intro`, `aspirations.closing`, `aspirations.areas` |
+| Project: full description, motivation (own words), gap (3 fields, own words) | `project.ts` → `fullDescription`, `motivation`, `gap` (the repo-grounded `motivationFromRepo` / `gapFromRepo` are always shown) |
 | Project: website prompts — actual prompt text, changes after generation | `project.ts` → `prompts[].actualPrompt`, `prompts[].changesAfter` |
-| Project: gallery captions / intro | `project.ts` → `gallery.images[].caption`, `gallery.intro` |
-| Project: architecture diagram image, technical-overview image | `project.ts` → `architectureDiagramImage`, `technicalOverviewImage` (`null` shows an “Add image” box; set to `{ src, alt, caption, width, height }` and put the file in `public/images/project/`) |
+| Project: gallery intro | `project.ts` → `gallery.intro` |
+| Project: architecture diagram image, technical-overview image | `project.ts` → `architectureDiagramImage`, `technicalOverviewImage` (`null` renders nothing; set to `{ src, alt, caption, width, height }` and put the file in `public/images/project/`) |
 | Project: optional notes (stack, data, users, own example) | `project.ts` → `techStackNote`, `datasetsNote`, `users.note`, `example.ownExample` |
-| Presentation embed | `project.ts` → `presentation.embedPresentation` (keep `false` until the Google Slides deck is shared as “Anyone with the link can view”; then `true` shows the `/embed` viewer) |
-| Topic list confirmation | `syllabus.ts` → each module's `topicsConfirmed` (data only) |
+| Presentation embed | `project.ts` → `presentation.embedPresentation` (keep `false` until the Google Slides deck is shared as “Anyone with the link can view”) |
+| Topic list confirmation | `syllabus.ts` → each module's `topicsConfirmed` (data only, never shown) |
+
+## Classroom Contributions
+
+All figures on `/contributions` (total stars, entries, session dates, category counts, timeline, evidence gallery) are computed from `recognitionEntries` in `src/content/contributions.ts`. With no entries the page shows dashes and one empty-state message. To add an entry, copy the commented example at the bottom of that file, fill in real values, and put any evidence images in `public/images/contributions/`. Only record what actually happened.
 
 ## Approving draft reflections
 
@@ -105,7 +109,7 @@ When every reflection is reviewed, you can also hide all tags at once with `show
 
 ## Honesty notes
 
-- **LexAudit** facts come only from the repository (`main` = `codex/lexaudit-personal-release`, commit `e5436ea`): README, CONTRIBUTORS.md and docs/ (KNOWN_LIMITATIONS, RESEARCH_VALIDITY_STATUS, data_governance, system_card, PHASE2_IMPLEMENTATION_REPORT). Test counts are software verification, not accuracy. Individual contribution is a placeholder.
+- **LexAudit** facts come only from the repository (`main` = `codex/lexaudit-personal-release`, commit `e5436ea`): README, CONTRIBUTORS.md and docs/ (KNOWN_LIMITATIONS, RESEARCH_VALIDITY_STATUS, data_governance, system_card, PHASE2_IMPLEMENTATION_REPORT). Test counts are software verification, not accuracy. Individual contribution is not described.
 - **Demos** run fully client-side. The Porter stemmer and edit distance are complete algorithms; the tokenizer subword mode, lemma table, POS tagger, morphology set, CFG, sentiment lexicon and WordNet data are small and labelled as toys / static.
 - **Exhibit** URLs were checked (HTTP 200) on 2026-11-01; images are each repo's own GitHub social card.
 
