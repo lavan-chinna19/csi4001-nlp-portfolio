@@ -28,7 +28,7 @@ csi4001-nlp-portfolio/
 │   ├── og-cover.jpg        # social preview (screenshot of the cover)
 │   ├── fonts/              # self-hosted woff2 files
 │   └── images/
-│       ├── profile-placeholder.svg      # ← replace with your photo
+│       ├── project/*.webp               # LexAudit presentation photos (gallery)
 │       └── exhibits/*.webp              # GitHub OpenGraph cards of each repo
 └── src/
     ├── content/            # ALL text lives here — edit these, not the UI
@@ -70,14 +70,21 @@ Everything you read on the site comes from `src/content/`. The UI never needs to
 
 ## Replacing placeholders
 
-Placeholders are written in `[square brackets]` and render with a dashed outline so they are easy to spot.
+Two kinds of placeholder exist:
+
+- **`PLACEHOLDER` fields (Version 2).** Editable fields set to the `PLACEHOLDER` constant (an empty string, defined in `src/content/types.ts`) render as a subtle dashed **“Add your … here”** box. Replace `PLACEHOLDER` with your own text and the box disappears. Every one is marked with a `TODO(lavan)` comment — search for it.
+- **`[square brackets]`** in older text render with a dashed outline.
 
 | What | Where |
 | --- | --- |
-| Profile photo | Replace `public/images/profile-placeholder.svg` (or point `about.photo.src` to a new file in `public/images/`), update `alt`, set `isPlaceholder: false` |
-| How I learn, Future aspirations | `about.ts` → `sections` (set `placeholder: false`) |
-| LinkedIn, email | `site.ts` → `links.linkedin.href`, `links.email.href` (plain address, `mailto:` is added) |
-| Problem statement, motivation, data note, contribution, challenges, screenshots, future work | `project.ts` → `placeholders`, `dataNote` |
+| How I Learn (5 sub-sections), Future Aspirations (5 fields) | `about.ts` → `howILearn.blocks[].body`, `aspirations.fields[].body` |
+| LinkedIn, email, GitHub | `about.ts` → `contact` (site footer reads the same values via `site.ts`; `mailto:` is added for email) |
+| Project: full description, motivation, gap (3 fields) | `project.ts` → `fullDescription`, `motivation`, `gap` |
+| Project: website prompts — actual prompt text, changes after generation | `project.ts` → `prompts[].actualPrompt`, `prompts[].changesAfter` |
+| Project: gallery captions / intro | `project.ts` → `gallery.images[].caption`, `gallery.intro` |
+| Project: architecture diagram image, technical-overview image | `project.ts` → `architectureDiagramImage`, `technicalOverviewImage` (`null` shows an “Add image” box; set to `{ src, alt, caption, width, height }` and put the file in `public/images/project/`) |
+| Project: optional notes (stack, data, users, own example) | `project.ts` → `techStackNote`, `datasetsNote`, `users.note`, `example.ownExample` |
+| Presentation embed | `project.ts` → `presentation.embedPresentation` (keep `false` until the Google Slides deck is shared as “Anyone with the link can view”; then `true` shows the `/embed` viewer) |
 | Topic list confirmation | `syllabus.ts` → each module's `topicsConfirmed` (data only) |
 
 ## Approving draft reflections
