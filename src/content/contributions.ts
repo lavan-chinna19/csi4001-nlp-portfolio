@@ -3,24 +3,25 @@
  *
  * A record of stars and recognition received in CSI4001 NLP classes.
  * Everything on the /contributions page (totals, timeline, filters, gallery)
- * is computed from `recognitionEntries` below. Nothing is hard-coded, so an
- * empty list shows dashes and a single empty-state message.
+ * is computed from `recognitionEntries` below. Nothing is hard-coded: stars are
+ * counted only from each entry's `stars`, never from photos.
  *
  * ── HOW TO ADD AN ENTRY ─────────────────────────────────────────────────────
- * 1. Copy the example entry at the bottom of this file into the
- *    `recognitionEntries` array and remove the comment markers.
- * 2. Give it a unique `id` (e.g. '2026-11-12-pos-tagging').
- * 3. `date` is the class date as an ISO date string: 'YYYY-MM-DD'.
- * 4. `stars` is the number of stars you received in that class (a whole number).
+ * 1. Add an object to the END of `recognitionEntries`. Its position gives its
+ *    entry number (the 7th item becomes "Entry 07").
+ * 2. Give it a unique `id` (e.g. 'pos-tagging').
+ * 3. `title` and `description` say what you did, in your own words.
+ * 4. `stars` is the number of stars you received for it (a whole number).
  * 5. `category` must be one of the keys in `recognitionCategories` below.
- * 6. `facultyFeedback` is optional — only add words the faculty actually said or wrote.
- * 7. `evidence` is optional. Put images in  public/images/contributions/
- *    (WebP or JPG, ideally ≤ 1600 px wide) and reference them as
- *    '/images/contributions/<file-name>'. Every image needs `alt` text
- *    (what the photo shows) and a short `caption`.
+ * 6. Optional: `date` ('YYYY-MM-DD'), `answer` (what you said), `examples`
+ *    (short words or forms you gave), `session` (the same key on entries from
+ *    the same class), `facultyFeedback` (only the faculty's actual words).
+ * 7. Optional `evidence`: put images in public/images/contributions/ and
+ *    reference them as '/images/contributions/<file-name>' with `alt` text,
+ *    a short `caption`, and the image's pixel `width` and `height`.
  *
  * Record only what actually happened — never estimate or round up.
- * Entries can be in any order; the page sorts them by date (newest first).
+ * The timeline keeps entry order; it sorts by date only when every entry has one.
  */
 
 export type RecognitionCategory =
@@ -32,23 +33,34 @@ export type RecognitionCategory =
   | 'helping-peers';
 
 export interface RecognitionEvidence {
-  /** Path under /public, e.g. '/images/contributions/2026-11-12-board.webp'. */
+  /** Path under /public, e.g. '/images/contributions/entry-02-board.jpg'. */
   src: string;
   alt: string;
   caption: string;
+  /** Natural pixel size, so the photo keeps its own (often very wide) aspect ratio. */
+  width?: number;
+  height?: number;
 }
 
 export interface RecognitionEntry {
   id: string;
-  /** ISO date of the class session, 'YYYY-MM-DD'. */
-  date: string;
+  /** Short title, e.g. 'Bigram Chain Rule'. */
+  title: string;
+  /** One sentence on what you did. */
+  description: string;
   /** Stars received for this contribution. */
   stars: number;
-  /** What you did, e.g. 'Answered a question on smoothing'. */
-  activity: string;
-  /** The NLP topic of the session, e.g. 'N-gram language models'. */
+  /** The NLP topic, e.g. 'N-Gram Language Models'. */
   topic: string;
   category: RecognitionCategory;
+  /** Optional — ISO date of the class, 'YYYY-MM-DD'. Leave out when unknown. */
+  date?: string;
+  /** Optional — entries from the same class session share this key. */
+  session?: string;
+  /** Optional — the answer you gave, in your words. */
+  answer?: string;
+  /** Optional — words or forms you gave as examples. */
+  examples?: string[];
   /** Optional — the faculty's actual words, if any. */
   facultyFeedback?: string;
   /** Optional — photos or screenshots as evidence. */
@@ -74,28 +86,83 @@ export const contributionsPage = {
 };
 
 export const recognitionEntries: RecognitionEntry[] = [
-  // TODO(lavan): add real entries here (see the instructions at the top of this file).
+  {
+    id: 'markov-rule',
+    title: 'Understanding the Markov Rule',
+    description: 'Answered a question about the Markov rule in language models.',
+    answer: 'We do not need the whole sentence to find the probability of a word; we just need the word before it.',
+    stars: 1,
+    topic: 'N-Gram Language Models',
+    category: 'answering-questions',
+  },
+  {
+    id: 'bigram-chain-rule',
+    title: 'Bigram Chain Rule',
+    description: 'Wrote the bigram chain rule formula on the classroom board.',
+    stars: 2,
+    topic: 'N-Gram Language Models',
+    category: 'technical-explanations',
+    evidence: [
+      {
+        src: '/images/contributions/entry-02-bigram-chain-rule-recognition.jpg',
+        alt: 'Handwritten note in a ruled notebook reading “CSI4001”, “2 ★s” and “Super star of NLP class”, with the faculty’s signature.',
+        caption: 'Handwritten recognition: CSI4001 · Super Star of NLP Class',
+        width: 1590,
+        height: 517,
+      },
+    ],
+  },
+  {
+    id: 'native-morphology',
+    title: 'Morphology in My Native Language',
+    description: 'Identified words containing suffixes in my native language.',
+    examples: ['thinadam', 'thintunnanu', 'thinanu'],
+    stars: 1,
+    topic: 'Morphology',
+    category: 'class-participation',
+  },
+  {
+    id: 'types-and-tokens',
+    title: 'Types and Tokens',
+    description: 'Identified the number of types and tokens in a given sentence.',
+    stars: 1,
+    topic: 'Text Processing',
+    category: 'answering-questions',
+    session: 'S-mle-types',
+  },
+  {
+    id: 'mle',
+    title: 'Maximum Likelihood Estimation',
+    description: 'Answered a classroom question about the Maximum Likelihood Estimation formula.',
+    stars: 1,
+    topic: 'N-Gram Language Models',
+    category: 'answering-questions',
+    session: 'S-mle-types',
+    evidence: [
+      {
+        src: '/images/contributions/entry-05-mle-recognition.jpg',
+        alt: 'Handwritten note in a ruled notebook with a star count and the faculty’s signature, written for the class session in which entries 04 and 05 took place.',
+        caption: 'Handwritten recognition from this class session (covers Entries 04 and 05)',
+        width: 1599,
+        height: 411,
+      },
+    ],
+  },
+  {
+    id: 'presentation-answers',
+    title: 'Project Presentation Participation',
+    description: 'Answered questions during project presentations.',
+    stars: 2,
+    topic: 'Project presentations',
+    category: 'project-presentations',
+    evidence: [
+      {
+        src: '/images/contributions/entry-06-presentation-answers-recognition.jpg',
+        alt: 'Handwritten note in a ruled notebook reading “2 ★s” and “Presentation answers”, with the faculty’s signature.',
+        caption: 'Handwritten recognition: Presentation answers',
+        width: 1458,
+        height: 490,
+      },
+    ],
+  },
 ];
-
-/*
- * ── EXAMPLE ENTRY (illustration only — NOT real data) ──────────────────────
- * Copy into `recognitionEntries` above and replace every value with what
- * actually happened.
- *
- * {
- *   id: '2026-11-12-smoothing',
- *   date: '2026-11-12',
- *   stars: 1,
- *   activity: 'Answered a question on Laplace smoothing',
- *   topic: 'N-gram language models',
- *   category: 'answering-questions',
- *   facultyFeedback: 'Optional — the faculty’s actual words.',
- *   evidence: [
- *     {
- *       src: '/images/contributions/2026-11-12-smoothing.webp',
- *       alt: 'Describe what the photo shows',
- *       caption: 'Short caption',
- *     },
- *   ],
- * },
- */
