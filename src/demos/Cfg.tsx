@@ -100,7 +100,7 @@ export default function CfgDemo() {
                   </button>
                 ))}
             </div>
-            <div className="overflow-x-auto bg-ivory p-2"><TreeSvg tree={r.parses[k]} /></div>
+            <div className="overflow-x-auto bg-ivory p-2" data-hscroll-ok="parse tree diagram"><TreeSvg tree={r.parses[k]} /></div>
           </>
         )}
       </div>

@@ -34,8 +34,8 @@ export default function StemmerDemo() {
       <label className="sr-only" htmlFor="stem-in">Words to stem</label>
       <input id="stem-in" className={inputCls} value={text} onChange={(e) => setText(e.target.value)} />
       <div className="mt-4 overflow-x-auto">
-        <table className="w-full min-w-[420px] text-left text-sm">
-          <thead className="font-mono text-[11px] uppercase tracking-wider text-sage-deep">
+        <table className="w-full text-left text-[13px] sm:text-sm">
+          <thead className="font-mono text-[10px] uppercase tracking-wider text-sage-deep sm:text-[11px]">
             <tr className="border-b border-ink/20">
               <th className="py-2 pr-3 font-medium">word</th>
               <th className="py-2 pr-3 font-medium">porter stem</th>
@@ -43,7 +43,7 @@ export default function StemmerDemo() {
               <th className="py-2 font-medium">steps</th>
             </tr>
           </thead>
-          <tbody className="font-mono">
+          <tbody className="font-mono [overflow-wrap:anywhere]">
             {rows.map((r, i) => (
               <tr key={r.w + i} className="border-b border-ink/10 align-top">
                 <td className="py-1.5 pr-3">{r.w}</td>

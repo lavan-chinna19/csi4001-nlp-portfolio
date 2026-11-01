@@ -32,7 +32,7 @@ export default function WordNetDemo() {
             <li key={x.id}>
               <button type="button" aria-pressed={sel === x.id} onClick={() => setSel(x.id)} className={`w-full border px-2.5 py-1.5 text-left ${sel === x.id ? 'border-sage-deep bg-sage-deep text-ivory' : 'border-ink/15 bg-ivory hover:border-ink/40'}`}>
                 <span className="block font-mono text-[11px] font-semibold">{x.id}</span>
-                <span className="block truncate text-xs opacity-85">{x.gloss}</span>
+                <span className="block break-words text-xs leading-snug opacity-85">{x.gloss}</span>
               </button>
             </li>
           ))}

@@ -58,7 +58,7 @@ export default function BigramDemo() {
               const p = laplace ? r.lap : r.mle;
               return (
                 <li key={r.w} className="grid grid-cols-[80px_1fr_56px] items-center gap-2 font-mono text-xs">
-                  <span className="truncate">{r.w}</span>
+                  <span className="min-w-0 break-words">{r.w}</span>
                   <span className="h-2 bg-ink/10"><span className="block h-full bg-sage-dark" style={{ width: `${Math.min(100, p * 100)}%` }} /></span>
                   <span className="text-right">{fmt(p)}</span>
                 </li>
@@ -73,14 +73,14 @@ export default function BigramDemo() {
         <input className={inputCls} value={test} onChange={(e) => setTest(e.target.value)} />
       </label>
       <div className="mt-3 overflow-x-auto">
-        <table className="w-full min-w-[440px] font-mono text-xs">
+        <table className="w-full font-mono text-[11px] sm:text-xs">
           <thead className="text-left text-sage-deep">
             <tr className="border-b border-ink/20"><th className="py-1.5 font-medium">bigram</th><th className="font-medium">count</th><th className="font-medium">MLE</th><th className="font-medium">Laplace</th></tr>
           </thead>
           <tbody>
             {score.steps.map((s, i) => (
               <tr key={i} className="border-b border-ink/10">
-                <td className="py-1">{s.prev} → {s.w}</td>
+                <td className="break-words py-1 pr-2">{s.prev} → {s.w}</td>
                 <td>{s.count}/{s.history}</td>
                 <td className={s.mle === 0 ? 'font-semibold text-[#9a3412]' : ''}>{fmt(s.mle)}</td>
                 <td>{fmt(s.laplace)}</td>
