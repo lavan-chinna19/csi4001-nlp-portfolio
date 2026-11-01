@@ -87,7 +87,7 @@ export default function Exhibits() {
           The NLP projects that made me <span className="italic normal-case text-lime">think</span>
         </h1>
         <p className="mt-8 max-w-2xl text-lg text-ivory/80">
-          Nine real, open-source projects — each one a different answer to the question of how to turn language into something a machine can act on. Every repository link was checked; images are each repository’s own GitHub social card.
+          Nine real, open-source projects — each one a different answer to the question of how to turn language into something a machine can act on. Every project link was checked; images are each project’s own GitHub social card.
         </p>
       </header>
 

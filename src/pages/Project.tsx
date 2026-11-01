@@ -15,7 +15,7 @@ const TOC = [
   { id: 'architecture', label: 'Architecture' },
   { id: 'stack', label: 'Tech stack' },
   { id: 'datasets', label: 'Datasets' },
-  { id: 'prompts', label: 'Website prompts' },
+  { id: 'prompts', label: 'Build prompts' },
   { id: 'pipeline', label: 'NLP pipeline' },
   { id: 'users', label: 'Users, inputs & outputs' },
   { id: 'references', label: 'References' },
@@ -123,9 +123,9 @@ export default function Project() {
               </div>
               <div className="flex justify-between gap-4 py-3"><dt className="text-ink-mute">RUNS ON</dt><dd className="text-right">Local CPU</dd></div>
               <div className="flex justify-between gap-4 py-3"><dt className="text-ink-mute">ENCODER</dt><dd className="text-right">legal-bert-base-uncased</dd></div>
-              <div className="flex justify-between gap-4 py-3"><dt className="text-ink-mute">SOURCE</dt><dd className="text-right">{p.repoCommit}</dd></div>
+              <div className="flex justify-between gap-4 py-3"><dt className="text-ink-mute">RELEASE</dt><dd className="text-right">{p.releaseLabel}</dd></div>
             </dl>
-            <img src={p.image} alt="GitHub social card for the LexAudit repository" width={1200} height={600} loading="lazy" className="mt-6 w-full border border-ivory/10 opacity-90" />
+            <img src={p.image} alt="LexAudit project social card" width={1200} height={600} loading="lazy" className="mt-6 w-full border border-ivory/10 opacity-90" />
           </aside>
         </div>
 
@@ -159,7 +159,7 @@ export default function Project() {
           <Section id="title" num="01" title={p.title} kicker="Title">
             <div className="grid gap-8 md:grid-cols-12">
               <div className={hasText(p.fullDescription) ? 'md:col-span-5' : 'md:col-span-9'}>
-                <p className="label mb-3 text-ink-mute">Summary · from the README</p>
+                <p className="label mb-3 text-ink-mute">Summary</p>
                 <p className="text-lg leading-relaxed text-ivory/85">{p.summary}</p>
                 <p className="mt-4 font-mono text-[11px] text-ink-mute">Team project · {p.team.map((t) => t.handle).join(' & ')} · CSI4001</p>
                 <dl className="mt-8 divide-y divide-ivory/10 border-y border-ivory/10">
@@ -183,14 +183,13 @@ export default function Project() {
           {/* 02 */}
           <Section id="motivation" num="02" title="Motivation">
             <div className="border-l-2 border-lime pl-6">
-              <p className="font-serif text-2xl leading-snug text-ivory md:text-3xl">{p.motivationFromRepo.statement}</p>
+              <p className="font-serif text-2xl leading-snug text-ivory md:text-3xl">{p.motivationFacts.statement}</p>
             </div>
             <ul className="mt-8 grid gap-px bg-ivory/10 md:grid-cols-2">
-              {p.motivationFromRepo.points.map((pt) => (
+              {p.motivationFacts.points.map((pt) => (
                 <li key={pt} className="bg-ink p-5 text-sm leading-relaxed text-ivory/80">{pt}</li>
               ))}
             </ul>
-            <p className="mt-3 font-mono text-[11px] text-ink-mute">As stated in the repository: {p.motivationFromRepo.source}.</p>
             {hasText(p.motivation) && (
               <div className="mt-10">
                 <p className="label mb-3 text-sage">In our words</p>
@@ -202,16 +201,14 @@ export default function Project() {
           {/* 03 */}
           <Section id="gap" num="03" title="Existing gap / event that motivated the project">
             <ol className="grid gap-px bg-ivory/10 md:grid-cols-3">
-              {p.gapFromRepo.map((g) => (
+              {p.gapFacts.map((g) => (
                 <li key={g.k} className="flex flex-col bg-ink p-6">
                   <p className="font-serif text-4xl italic text-sage">{g.k}.</p>
                   <h3 className="mb-4 mt-2 text-sm font-semibold uppercase tracking-wide">{g.title}</h3>
                   <p className="text-sm leading-relaxed text-ivory/85">{g.text}</p>
-                  <p className="mt-auto pt-4 font-mono text-[10px] leading-relaxed text-ink-mute">{g.source}</p>
                 </li>
               ))}
             </ol>
-            <p className="mt-3 font-mono text-[11px] text-ink-mute">Framed from the repository’s own documentation; it does not benchmark LexAudit against other tools.</p>
             {(() => {
               const own = [
                 { t: 'Existing challenges', v: p.gap.existingChallenges },
@@ -248,7 +245,7 @@ export default function Project() {
                   <div key={c.name} className="grid gap-2 py-4 md:grid-cols-12">
                     <dt className="md:col-span-3">
                       <p className="font-semibold">{c.name}</p>
-                      <p className="mt-1 break-words font-mono text-[10px] text-sage">{c.path}</p>
+                      <p className="mt-1 break-words font-mono text-[10px] text-sage">{c.tag}</p>
                     </dt>
                     <dd className="text-sm leading-relaxed text-ivory/80 md:col-span-9">{c.text}</dd>
                   </div>
@@ -269,7 +266,6 @@ export default function Project() {
                   </li>
                 ))}
               </ol>
-              <p className="mt-3 font-mono text-[11px] text-ink-mute">From the README’s launch and UI-workflow sections.</p>
             </Sub>
 
             <Sub n="4.4" title="Model architecture details">
@@ -279,18 +275,13 @@ export default function Project() {
                     <tr className="border-b border-ivory/20 font-mono text-[10px] uppercase tracking-[0.14em] text-ink-mute">
                       <th scope="col" className="py-2 pr-4 font-normal">Part</th>
                       <th scope="col" className="py-2 pr-4 font-normal">Detail</th>
-                      <th scope="col" className="hidden py-2 font-normal md:table-cell">Source in repo</th>
                     </tr>
                   </thead>
                   <tbody>
                     {p.modelDetails.map((m) => (
                       <tr key={m.k} className="border-b border-ivory/10 align-top">
                         <th scope="row" className="py-3 pr-4 font-semibold">{m.k}</th>
-                        <td className="py-3 pr-4 leading-relaxed text-ivory/85">
-                          {m.v}
-                          <span className="mt-1 block break-all font-mono text-[10px] text-sage md:hidden">{m.src}</span>
-                        </td>
-                        <td className="hidden py-3 font-mono text-[10px] leading-relaxed text-sage md:table-cell">{m.src}</td>
+                        <td className="py-3 leading-relaxed text-ivory/85">{m.v}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -308,7 +299,7 @@ export default function Project() {
                 ))}
               </p>
               <p className="mt-3 text-sm text-ivory/70">
-                Each stage is mapped to real repository components in <a href="#pipeline" className="link-u text-sage">§08 NLP pipeline</a>.
+                Each stage is described in detail in <a href="#pipeline" className="link-u text-sage">§08 NLP pipeline</a>.
               </p>
             </Sub>
 
@@ -319,10 +310,10 @@ export default function Project() {
             )}
 
             <Sub n={p.technicalOverviewImage ? '4.7' : '4.6'} title="Capabilities, status & verification">
-              <p className="mb-2 border-l-2 border-lime pl-4 text-ivory/90" data-testid="repo-status">{p.repositoryStatus.line}</p>
-              <p className="mb-6 pl-4 text-sm leading-relaxed text-ivory/65">{p.repositoryStatus.detail}</p>
+              <p className="mb-2 border-l-2 border-lime pl-4 text-ivory/90" data-testid="project-maturity">{p.projectStatus.line}</p>
+              <p className="mb-6 pl-4 text-sm leading-relaxed text-ivory/65">{p.projectStatus.detail}</p>
               <div className="border-t border-ivory/10">
-                <Expand title="Capabilities" meta={`${p.features.length} areas · README`}>
+                <Expand title="Capabilities" meta={`${p.features.length} areas`}>
                   <ol className="grid gap-px bg-ivory/10 md:grid-cols-2 xl:grid-cols-3">
                     {p.features.map((f, i) => (
                       <li key={f.title} className="bg-ink p-5">
@@ -345,7 +336,6 @@ export default function Project() {
                     ))}
                   </div>
                   <p className="mt-5 font-mono text-xs leading-relaxed text-ivory/70">{p.verification.caveat}</p>
-                  <p className="mt-2 font-mono text-[11px] leading-relaxed text-ink-mute">Source: {p.verification.source}.</p>
                   <div className="mt-8 grid gap-6 md:grid-cols-12">
                     <p className="text-ivory/85 md:col-span-5">{p.validity.statement}</p>
                     <div className="md:col-span-7">
@@ -382,7 +372,6 @@ export default function Project() {
                   <tr className="border-b border-ivory/20 font-mono text-[10px] uppercase tracking-[0.14em] text-ink-mute">
                     <th scope="col" className="w-[22%] py-2 pr-4 font-normal">Category</th>
                     <th scope="col" className="py-2 pr-4 font-normal">Technologies</th>
-                    <th scope="col" className="hidden w-[22%] py-2 font-normal md:table-cell">Verified in</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -395,9 +384,7 @@ export default function Project() {
                             <li key={it} className="max-w-full break-words border border-ivory/20 px-2 py-0.5 font-mono text-xs">{it}</li>
                           ))}
                         </ul>
-                        <span className="mt-2 block font-mono text-[10px] text-ink-mute md:hidden">{g.source}</span>
                       </td>
-                      <td className="hidden py-4 font-mono text-[10px] leading-relaxed text-ink-mute md:table-cell">{g.source}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -433,53 +420,41 @@ export default function Project() {
                 </Expand>
               ))}
             </div>
-            <p className="mt-4 font-mono text-[11px] text-ink-mute">From docs/data_governance.md, docs/system_card.md, docs/THIRD_PARTY_NOTICES.md and the ingestion scripts. Raw datasets are not stored in the repository.</p>
+            <p className="mt-4 font-mono text-[11px] text-ink-mute">Raw datasets are downloaded at ingestion time and are not redistributed with the application.</p>
             <EditableText value={p.datasetsNote} className="mt-6" textClass="text-[16px] leading-relaxed text-ivory/85" />
           </Section>
 
           {/* 07 */}
-          <Section id="prompts" num="07" title="Prompts used for construction of the website">
-            <p className="mb-8 max-w-3xl border border-dashed border-sage/50 p-4 text-sm leading-relaxed text-ivory/80">
-              <span className="label mr-2 text-sage">Note</span>
-              {p.promptsNote}
-            </p>
-            <ol className="space-y-10">
-              {p.prompts.map((pr, i) => (
-                <li key={pr.title} className="grid gap-6 md:grid-cols-12">
-                  <div className="md:col-span-4">
-                    <p className="font-mono text-[11px] text-lime">P{i + 1} · {pr.version}</p>
-                    <h3 className="mt-2 break-words font-mono text-sm font-semibold uppercase leading-snug tracking-wide">{pr.title}</h3>
-                    <p className="mt-3 text-sm text-ivory/75">{pr.summary}</p>
-                  </div>
-                  <dl className="divide-y divide-ivory/10 border-y border-ivory/10 md:col-span-8">
-                    {(
-                      [
-                        ['Purpose', pr.purpose],
-                        ['Actual prompt', pr.actualPrompt],
-                        ['Tool used', pr.tool],
-                        ['What it generated', pr.generated],
-                        ['Changes made after generation', pr.changesAfter],
-                      ] as const
-                    )
-                      .filter(([, v]) => hasText(v))
-                      .map(([k, v]) => (
-                        <div key={k} className="grid gap-2 py-3 sm:grid-cols-[11rem_1fr]">
-                          <dt className="label pt-0.5 text-ink-mute">{k}</dt>
-                          <dd>
-                            <EditableText value={v} textClass={`text-sm leading-relaxed text-ivory/85 ${k === 'Actual prompt' ? 'whitespace-pre-wrap font-mono text-xs' : ''}`} />
-                          </dd>
-                        </div>
-                      ))}
-                  </dl>
-                </li>
-              ))}
-            </ol>
+          <Section id="prompts" num="07" title="Prompts used in building LexAudit">
+            <p className="mb-8 max-w-3xl text-ivory/75">{p.promptsIntro}</p>
+            {p.prompts.length > 0 && (
+              <ol className="divide-y divide-ivory/10 border-y border-ivory/10" data-testid="build-prompts">
+                {p.prompts.map((pr, i) => (
+                  <li key={pr.title} className="grid gap-4 py-6 md:grid-cols-12 md:gap-6">
+                    <div className="md:col-span-4">
+                      <p className="font-mono text-[11px] text-lime">P{String(i + 1).padStart(2, '0')}</p>
+                      <h3 className="mt-2 font-serif text-2xl leading-tight">{pr.title}</h3>
+                    </div>
+                    <dl className="grid gap-4 sm:grid-cols-2 md:col-span-8">
+                      <div>
+                        <dt className="label mb-2 text-ink-mute">What it set out to do</dt>
+                        <dd className="text-sm leading-relaxed text-ivory/85">{pr.aim}</dd>
+                      </div>
+                      <div>
+                        <dt className="label mb-2 text-ink-mute">What it helped produce</dt>
+                        <dd className="text-sm leading-relaxed text-ivory/85">{pr.outcome}</dd>
+                      </div>
+                    </dl>
+                  </li>
+                ))}
+              </ol>
+            )}
           </Section>
 
           {/* 08 */}
           <Section id="pipeline" num="08" title="NLP pipeline">
             <p className="mb-8 max-w-3xl text-ivory/75">
-              The eight stages below are mapped to what the repository actually does. A dashed stage is not a separate step in LexAudit’s own code.
+              The eight stages below are mapped to what LexAudit actually does. A dashed stage is not a separate step in LexAudit’s own code.
             </p>
             <PipelineDiagram />
           </Section>
@@ -497,7 +472,7 @@ export default function Project() {
                   ))}
                 </ul>
                 <div className="md:col-span-5">
-                  <p className="label mb-3 text-sage">Out of scope · system card</p>
+                  <p className="label mb-3 text-sage">Out of scope</p>
                   <ul className="space-y-2">
                     {p.users.outOfScope.map((o) => (
                       <li key={o} className="flex gap-2 text-sm text-ivory/80"><span aria-hidden className="text-ink-mute">×</span>{o}</li>
