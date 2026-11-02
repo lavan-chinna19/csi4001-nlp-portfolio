@@ -511,3 +511,13 @@ export const project = {
     { cite: 'GoutamNandhen & lavan-chinna19. (2026). Legal-contract-coherence-auditor- [Source code]. GitHub.', url: 'https://github.com/lavan-chinna19/Legal-contract-coherence-auditor-', usedFor: 'Project repository' },
   ],
 };
+
+/** "See LexAudit in Action" — demonstration video hosted on Google Drive. */
+export const demoVideo = {
+  title: 'See LexAudit in Action',
+  subtitle: 'A walkthrough of our NLP website, demonstrating its interface, workflow and contract analysis functionality.',
+  name: 'LexAudit – Website Demonstration',
+  embedUrl: 'https://drive.google.com/file/d/1fcvY3Z9iFUGOgHCVXnbF__eKeQ9Iu3un/preview',
+  driveUrl: 'https://drive.google.com/file/d/1fcvY3Z9iFUGOgHCVXnbF__eKeQ9Iu3un/view?usp=drive_link',
+  caption: 'Project demonstration – CSI4001 Natural Language Processing.',
+};
