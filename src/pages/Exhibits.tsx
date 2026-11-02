@@ -6,7 +6,7 @@ import Page from '../components/Page';
 import NextChapter from '../components/NextChapter';
 import { Reveal } from '../components/Bits';
 import { PresentationGallery } from '../components/PresentationGallery';
-import { classProjects, type ClassProject } from '../content/exhibits';
+import { classProjects, collectionIntro, type ClassProject } from '../content/exhibits';
 
 const mine = classProjects.filter((p) => p.mine);
 const classmates = classProjects.filter((p) => !p.mine);
@@ -246,6 +246,34 @@ export default function Exhibits() {
             </div>
           </dl>
         </div>
+
+        <section aria-labelledby="h-collection-intro" data-collection-intro className="mt-20 border-t border-sage/30 pt-12 md:mt-24 md:pt-16">
+          <Reveal>
+            <div className="grid gap-8 md:grid-cols-12">
+              <div className="md:col-span-5">
+                <p className="label text-sage">{collectionIntro.label}</p>
+                <h2
+                  id="h-collection-intro"
+                  className="mt-5 max-w-[14ch] font-serif leading-[1.02] tracking-tight text-ivory"
+                  style={{ fontSize: 'clamp(2rem, 3.6vw, 3rem)' }}
+                >
+                  {collectionIntro.title}
+                </h2>
+              </div>
+              <div className="min-w-0 space-y-5 md:col-span-6 md:col-start-7 md:pt-9">
+                {collectionIntro.paragraphs.map((t) => (
+                  <p key={t.slice(0, 24)} className="max-w-[60ch] text-[1.05rem] leading-relaxed text-ivory/75">
+                    {t}
+                  </p>
+                ))}
+                <p className="flex items-center gap-4 pt-3 font-serif text-xl italic leading-snug text-sage md:text-2xl">
+                  <span aria-hidden className="h-px w-10 shrink-0 bg-sage/60" />
+                  <span className="min-w-0">{collectionIntro.closing}</span>
+                </p>
+              </div>
+            </div>
+          </Reveal>
+        </section>
 
         <nav aria-label="Projects on this page" className="mt-16">
           <ol className="border-b border-ivory/10">
