@@ -65,7 +65,7 @@ export const pageMeta: Record<string, { title: string; description: string }> = 
   },
   '/exhibits': {
     title: 'Projects That Made Me Think — Beyond Words',
-    description: 'A gallery of nine real open-source NLP projects and a connection map to the concepts behind them.',
+    description: 'Six NLP projects from my CSI4001 class: my own project, LexAudit, and five classmates’ projects I explored, each with one NLP lesson.',
   },
   '/contributions': {
     title: 'Classroom Contributions: Beyond the Classroom — Beyond Words',
