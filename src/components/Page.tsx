@@ -5,7 +5,7 @@ import { pageMeta } from '../content/site';
 
 export function usePageMeta(path: string) {
   useEffect(() => {
-    const meta = pageMeta[path] ?? { title: 'Not found — Beyond Words', description: 'This page does not exist.' };
+    const meta = pageMeta[path] ?? { title: 'Not found — Lavan Kumar – NLP Portfolio', description: 'This page does not exist.' };
     document.title = meta.title;
     const set = (sel: string, val: string) => document.querySelector(sel)?.setAttribute('content', val);
     set('meta[name="description"]', meta.description);

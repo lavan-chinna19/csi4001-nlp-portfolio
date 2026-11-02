@@ -76,8 +76,8 @@ export default function Layout({ children }: { children: ReactNode }) {
 
       <header className={`sticky top-0 z-50 border-b backdrop-blur-md ${dark ? 'border-ivory/10 bg-ink/80' : 'border-ink/10 bg-ivory/85'}`}>
         <div className="page-x flex h-14 items-center justify-between gap-6">
-          <Link to="/" className="group flex items-baseline gap-3" aria-label="Beyond Words — cover">
-            <span className="font-serif text-2xl uppercase leading-none tracking-wide">Beyond Words</span>
+          <Link to="/" className="group flex items-baseline gap-3" aria-label={`${site.title} — home`}>
+            <span className="font-serif text-2xl uppercase leading-none tracking-wide">{site.title}</span>
             <span className={`label hidden sm:inline ${dark ? 'text-ink-mute' : 'text-sage-deep'}`}>{site.course.code}</span>
           </Link>
           <nav aria-label="Primary" className="hidden xl:block">
@@ -158,7 +158,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         <footer className={`border-t ${dark ? 'border-ivory/10' : 'border-ink/10'}`}>
           <div className="page-x grid gap-8 py-12 md:grid-cols-12">
             <div className="md:col-span-6">
-              <p className="font-serif text-4xl uppercase leading-none">Beyond Words</p>
+              <p className="font-serif text-4xl uppercase leading-none">{site.title}</p>
               <p className={`mt-2 max-w-md font-serif text-lg italic ${dark ? 'text-sage' : 'text-sage-deep'}`}>{site.subtitle}</p>
               <p className={`mt-3 max-w-md text-sm ${dark ? 'text-ivory/65' : 'text-ink/65'}`}>
                 {site.course.code} portfolio · {site.name} · Reg. no. {site.registrationNumber} · {site.institution}.
