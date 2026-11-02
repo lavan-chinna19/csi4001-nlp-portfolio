@@ -10,7 +10,7 @@ An interactive academic portfolio for **CSI4001 · Natural Language Processing a
 | `/about` | About Me — *The person behind the words* | charcoal + ivory fact sheet |
 | `/project` | My Project — LexAudit case file, interactive pipeline + architecture | charcoal technical file |
 | `/learning` | My Learning — *How my understanding of language changed*, 8 modules, 10 live demos | charcoal header + ivory notebook |
-| `/exhibits` | Projects That Made Me Think — 9 real NLP projects + connection map | charcoal gallery, lime highlights |
+| `/exhibits` | Projects That Made Me Think — six CSI4001 class projects: LexAudit (mine) + five classmates' projects | charcoal editorial collection, sage/lime lesson panels |
 | `/contributions` | Classroom Contributions — *Beyond the Classroom*: stars and recognition received in CSI4001 classes | charcoal header + ivory journal |
 | `*` | 404 | charcoal |
 
@@ -31,18 +31,17 @@ csi4001-nlp-portfolio/
 │   └── images/
 │       ├── project/*.webp               # LexAudit presentation photos (gallery)
 │       ├── contributions/               # evidence images for Classroom Contributions
-│       └── exhibits/*.webp              # GitHub OpenGraph cards of each repo
+│       └── exhibits/*.webp              # LexAudit repository card (used by project.ts)
 └── src/
     ├── content/            # ALL text lives here — edit these, not the UI
     │   ├── site.ts         # name, reg. no., tagline, links, nav, per-page meta, showDraftTags
     │   ├── about.ts        # About page facts, sections, placeholders
     │   ├── project.ts      # LexAudit case study (facts from the repo docs only)
     │   ├── syllabus.ts     # 8 CSI4001 modules → concepts → reflections + demo ids
-    │   ├── exhibits.ts     # 9 external projects
+    │   ├── exhibits.ts     # 6 CSI4001 class projects (LexAudit + 5 classmates)
     │   ├── contributions.ts # Classroom Contributions entries + categories (instructions inside)
-    │   ├── conceptMap.ts   # concepts for the connection map (+ module links)
     │   └── types.ts        # Reflection type + draft() helper
-    ├── components/         # Layout, Page, SectionToc, ArcSentence, Pipeline, ConnectionMap…
+    ├── components/         # Layout, Page, SectionToc, ArcSentence, Pipeline, PresentationGallery…
     ├── demos/              # 10 in-browser demos (lazy-loaded)
     ├── lib/                # porter.ts (Porter stemmer), nlp.ts (edit distance, bigram LM,
     │                       #   CFG parser, toy POS tagger, sentiment, summarizer), text.ts
@@ -67,8 +66,7 @@ npx tsc --noEmit   # type-check only
 Everything you read on the site comes from `src/content/`. The UI never needs to change to add content.
 
 - **Add a learning note:** add a `Concept` object to a module in `syllabus.ts`. Optional `demo: 'tokenizer' | 'stemmer' | …` attaches a demo (shown once per module).
-- **Add an exhibit:** add an object to `exhibits.ts` (verify the repo URL first), drop its image into `public/images/exhibits/`, and list its `concepts` ids from `conceptMap.ts`. The connection map updates automatically.
-- **Add a map concept:** add it to `conceptMap.ts` (and to the `ConceptId` union); set `module` to a syllabus module id or `null`.
+- **Class projects (/exhibits):** edit `classProjects` in `exhibits.ts`. Each entry has exactly four points, one reflection, one NLP lesson. To show a presentation cover slide, add `coverImage: { src, alt, width, height }`; it replaces the title-based visual and opens in a larger view.
 - **Page titles/descriptions:** `pageMeta` in `site.ts`.
 
 ## Optional fields (nothing renders until filled)
@@ -111,7 +109,7 @@ When every reflection is reviewed, you can also hide all tags at once with `show
 
 - **LexAudit** facts come only from the repository (`main` = `codex/lexaudit-personal-release`, commit `e5436ea`): README, CONTRIBUTORS.md and docs/ (KNOWN_LIMITATIONS, RESEARCH_VALIDITY_STATUS, data_governance, system_card, PHASE2_IMPLEMENTATION_REPORT). Test counts are software verification, not accuracy. Public-facing text carries no file/path or documentation attributions (Version 4); sources are listed only in §10 References. Individual contribution is not described.
 - **Demos** run fully client-side. The Porter stemmer and edit distance are complete algorithms; the tokenizer subword mode, lemma table, POS tagger, morphology set, CFG, sentiment lexicon and WordNet data are small and labelled as toys / static.
-- **Exhibit** URLs were checked (HTTP 200) on 2026-11-01; images are each repo's own GitHub social card.
+- **Projects That Made Me Think** uses only Lavan's own written notes on the six CSI4001 projects; the five classmates' projects are presented as projects he explored, not ones he built. No team names, metrics or screenshots are added.
 
 ## Deploy to Vercel (not yet deployed)
 
