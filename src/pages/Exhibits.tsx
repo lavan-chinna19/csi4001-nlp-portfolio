@@ -31,48 +31,30 @@ function SectionLabel({ n, children, className = '' }: { n: string; children: st
   );
 }
 
-/** Title-based visual used when no presentation cover slide is available. */
-function TitlePlate({ p, headingId, featured = false }: { p: ClassProject; headingId: string; featured?: boolean }) {
-  const long = p.title.length > 34;
+/**
+ * Restrained project header: small mono label, serif title, muted category.
+ * When a presentation cover slide exists it shows as a modest thumbnail
+ * under the header (opens larger in the gallery lightbox).
+ */
+function ProjectHeader({ p, headingId, featured = false }: { p: ClassProject; headingId: string; featured?: boolean }) {
   return (
-    <div
-      className={`relative flex flex-col justify-between overflow-hidden border ${featured ? 'border-lime/30 bg-ink' : 'border-ivory/10 bg-ink-soft'} p-6 sm:p-8`}
-      style={{ aspectRatio: featured ? undefined : '4 / 3', minHeight: featured ? '22rem' : undefined }}
-    >
-      <span
-        aria-hidden
-        className="pointer-events-none absolute -right-4 -top-10 select-none font-serif leading-none text-transparent sm:-top-14"
-        style={{ fontSize: 'clamp(11rem, 22vw, 20rem)', WebkitTextStroke: `1px ${featured ? 'rgba(212,255,58,0.22)' : 'rgba(157,170,140,0.28)'}` }}
-      >
-        {p.num}
-      </span>
-      <span aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-ink/60 to-transparent" />
-      <p className={`relative font-mono text-[11px] uppercase tracking-[0.18em] ${featured ? 'text-lime' : 'text-sage'}`}>
-        {p.mine ? 'My project · CSI4001' : 'Presented in CSI4001'}
+    <div data-project-header>
+      <p className={`font-mono text-[11px] uppercase tracking-[0.18em] ${featured ? 'text-lime/90' : 'text-sage'}`}>
+        {featured ? 'My project · CSI4001' : `${p.num} · ${CLASSMATE_LABEL}`}
       </p>
-      <div className="relative mt-16">
-        <h3
-          id={headingId}
-          className="break-words font-serif leading-[0.95] text-ivory"
-          style={{ fontSize: featured ? 'clamp(3.6rem, 9vw, 8rem)' : long ? 'clamp(1.75rem, 3vw, 2.6rem)' : 'clamp(2.4rem, 4.4vw, 3.8rem)' }}
-        >
-          {p.title}
-        </h3>
-        <p className="mt-4 font-mono text-[11px] uppercase leading-relaxed tracking-[0.12em] text-ivory/60">{p.category}</p>
-      </div>
-    </div>
-  );
-}
-
-/** Cover slide when present (opens larger), otherwise the title plate. */
-function ProjectVisual({ p, headingId, featured }: { p: ClassProject; headingId: string; featured?: boolean }) {
-  if (!p.coverImage) return <TitlePlate p={p} headingId={headingId} featured={featured} />;
-  return (
-    <div>
-      <p className={`label mb-3 ${p.mine ? 'text-lime' : 'text-sage'}`}>{p.mine ? 'My project · CSI4001' : CLASSMATE_LABEL}</p>
-      <h3 id={headingId} className="mb-5 break-words font-serif leading-[0.95]" style={{ fontSize: 'clamp(2.2rem, 4.4vw, 3.8rem)' }}>{p.title}</h3>
-      <PresentationGallery cols={1} images={[{ ...p.coverImage, caption: `${p.title} — presentation cover` }]} />
-      <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.12em] text-ivory/60">{p.category}</p>
+      <h3
+        id={headingId}
+        className="mt-3 break-words font-serif leading-[1.08] text-ivory"
+        style={{ fontSize: featured ? 'clamp(2.25rem, 4vw, 3.25rem)' : 'clamp(1.75rem, 3vw, 2.5rem)' }}
+      >
+        {p.title}
+      </h3>
+      <p className="mt-3 font-mono text-[11px] uppercase leading-relaxed tracking-[0.12em] text-ivory/55">{p.category}</p>
+      {p.coverImage && (
+        <div className="mt-6 w-full max-w-sm">
+          <PresentationGallery cols={1} images={[{ ...p.coverImage, caption: `${p.title} — presentation cover` }]} />
+        </div>
+      )}
     </div>
   );
 }
@@ -154,16 +136,12 @@ function Featured({ p }: { p: ClassProject }) {
   return (
     <section id={`p-${p.id}`} tabIndex={-1} aria-labelledby={hid} data-project={p.id} className="scroll-mt-28 outline-none">
       <Reveal>
-        <div className="border border-lime/25 bg-ink-soft/60">
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-lime/20 px-5 py-3 sm:px-8">
-            <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-lime">01 · My project</p>
-            <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-ivory/55">The one I worked on</p>
-          </div>
-          <div className="grid gap-10 p-5 sm:p-8 lg:grid-cols-12 lg:gap-x-12 lg:p-12">
-            <div className="lg:col-span-6">
-              <ProjectVisual p={p} headingId={hid} featured />
+        <div className="border border-ivory/15 bg-ink-soft/40">
+          <div className="grid gap-8 p-5 sm:p-8 lg:grid-cols-12 lg:gap-x-12 lg:p-10">
+            <div className="lg:col-span-5">
+              <ProjectHeader p={p} headingId={hid} featured />
             </div>
-            <div className="flex flex-col justify-between gap-10 lg:col-span-6">
+            <div className="flex flex-col gap-8 lg:col-span-7">
               <div>
                 <SectionLabel n="01">Project overview</SectionLabel>
                 <p className="mt-5 font-serif text-[1.7rem] leading-snug md:text-[2.1rem]">{p.overview}</p>
@@ -188,28 +166,21 @@ function Featured({ p }: { p: ClassProject }) {
 
 /* ───────────────────────── Collection: classmates ───────────────────────── */
 
-function CollectionItem({ p, i }: { p: ClassProject; i: number }) {
+function CollectionItem({ p }: { p: ClassProject }) {
   const [open, setOpen] = useState(false);
   const reduce = useReducedMotion();
-  const flip = i % 2 === 1;
   const hid = `h-${p.id}`;
   const did = `d-${p.id}`;
   return (
-    <article id={`p-${p.id}`} tabIndex={-1} aria-labelledby={hid} data-project={p.id} className="scroll-mt-28 border-t border-ivory/10 py-16 outline-none md:py-24">
+    <article id={`p-${p.id}`} tabIndex={-1} aria-labelledby={hid} data-project={p.id} className="scroll-mt-28 border-t border-ivory/10 py-10 outline-none md:py-14">
       <Reveal>
-        <div className="grid grid-cols-12 gap-x-6 gap-y-10 lg:gap-x-12">
-          <div className={`col-span-12 lg:col-span-6 ${flip ? 'lg:order-2' : ''}`}>
-            <ProjectVisual p={p} headingId={hid} />
+        <div className="grid grid-cols-12 gap-x-6 gap-y-8 lg:gap-x-12">
+          <div className="col-span-12 lg:col-span-5">
+            <ProjectHeader p={p} headingId={hid} />
+            <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.12em] text-ivory/45">Not my project · explored and appreciated</p>
           </div>
-          <div className={`col-span-12 flex flex-col lg:col-span-6 ${flip ? 'lg:order-1' : ''}`}>
-            <div className={`flex items-end gap-5 ${flip ? 'lg:flex-row-reverse lg:text-right' : ''}`}>
-              <span aria-hidden className="font-serif leading-[0.8] text-sage" style={{ fontSize: 'clamp(4.5rem, 9vw, 8rem)' }}>{p.num}</span>
-              <div className="min-w-0 pb-2">
-                <p className="label text-sage">{CLASSMATE_LABEL}</p>
-                <p className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-ivory/55">Not my project · explored and appreciated</p>
-              </div>
-            </div>
-            <div className="mt-10">
+          <div className="col-span-12 flex flex-col lg:col-span-7">
+            <div>
               <SectionLabel n="01">Project overview</SectionLabel>
               <p className="mt-4 text-lg leading-relaxed text-ivory/85 md:text-xl">{p.overview}</p>
             </div>
@@ -217,7 +188,7 @@ function CollectionItem({ p, i }: { p: ClassProject; i: number }) {
               <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-mute">Lesson</span>
               <span className="font-mono text-xs uppercase tracking-[0.08em] text-lime/90">{p.lesson.title}</span>
             </p>
-            <div className="mt-auto pt-10">
+            <div className="mt-auto pt-8">
               <button
                 type="button"
                 aria-expanded={open}
@@ -235,7 +206,7 @@ function CollectionItem({ p, i }: { p: ClassProject; i: number }) {
           </div>
         </div>
       </Reveal>
-      <div id={did} role="region" aria-labelledby={hid} hidden={!open} className="mt-14">
+      <div id={did} role="region" aria-labelledby={hid} hidden={!open} className="mt-10">
         <motion.div
           key={open ? 'open' : 'closed'}
           initial={open && !reduce ? { opacity: 0, y: 12 } : false}
@@ -320,8 +291,8 @@ export default function Exhibits() {
               </p>
             </div>
           </Reveal>
-          {classmates.map((p, i) => (
-            <CollectionItem key={p.id} p={p} i={i} />
+          {classmates.map((p) => (
+            <CollectionItem key={p.id} p={p} />
           ))}
         </section>
       </div>
