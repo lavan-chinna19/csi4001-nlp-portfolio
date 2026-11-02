@@ -1,4 +1,4 @@
-# BEYOND WORDS — CSI4001 NLP Portfolio
+# Lavan Kumar – NLP Portfolio (CSI4001)
 
 *An Exploration of Natural Language Processing and Computational Linguistics.*
 
