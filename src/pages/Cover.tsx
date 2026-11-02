@@ -43,6 +43,7 @@ export default function Cover() {
             {site.tagline}
           </p>
           <div className="md:col-span-4">
+            <p className="mb-3 font-mono text-xs uppercase tracking-[0.14em] text-sage">NLP Portfolio of</p>
             <p className="font-serif text-4xl leading-none sm:text-5xl">{site.name}</p>
             <p className="mt-2 font-mono text-xs uppercase tracking-[0.14em] text-ivory/70">Registration Number: {site.registrationNumber}</p>
           </div>
