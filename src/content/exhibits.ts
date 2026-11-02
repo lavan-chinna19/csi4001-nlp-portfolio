@@ -181,3 +181,14 @@ export const classProjects: ClassProject[] = [
     takeaway: 'It reminded me that useful NLP has to meet people in the language they actually speak.',
   },
 ];
+
+/** Opening statement shown before the project collection (Lavan's own words, verbatim). */
+export const collectionIntro = {
+  label: 'Personal observations · not faculty evaluations',
+  title: 'Every project is unique in its own way.',
+  paragraphs: [
+    'This collection brings together the projects presented as part of our NLP course, including my own work. Each project reflects a different idea, effort and approach to solving a problem.',
+    'The projects featured here are based entirely on my personal interests and curiosity. I have highlighted the aspects I found interesting and one NLP concept I took away from each. This is not a ranking or comparison of projects, but simply my way of appreciating different ideas and learning from them.',
+  ],
+  closing: 'Different ideas. Different perspectives. Shared learning.',
+};
