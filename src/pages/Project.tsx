@@ -1,18 +1,19 @@
-import type { ReactNode } from 'react';
-import { ArrowUpRight, AlertTriangle, Presentation, ChevronDown, ArrowRight } from 'lucide-react';
+import { useState, type ReactNode } from 'react';
+import { ArrowUpRight, AlertTriangle, Presentation, ChevronDown, ArrowRight, Play } from 'lucide-react';
 import Page from '../components/Page';
 import SectionToc from '../components/SectionToc';
 import NextChapter from '../components/NextChapter';
 import { EditableText, Reveal, hasText } from '../components/Bits';
 import { ArchitectureDiagram, PipelineDiagram } from '../components/Pipeline';
 import { ImageSlotView, PresentationGallery } from '../components/PresentationGallery';
-import { project } from '../content/project';
+import { demoVideo, project } from '../content/project';
 
 const TOC = [
   { id: 'title', label: 'Title' },
   { id: 'motivation', label: 'Motivation' },
   { id: 'gap', label: 'Existing gap' },
   { id: 'architecture', label: 'Architecture' },
+  { id: 'demo', label: 'Demo video' },
   { id: 'stack', label: 'Tech stack' },
   { id: 'datasets', label: 'Datasets' },
   { id: 'prompts', label: 'Build prompts' },
@@ -65,6 +66,51 @@ function Expand({ title, meta, children, defaultOpen = false }: { title: string;
       </summary>
       <div className="pb-6">{children}</div>
     </details>
+  );
+}
+
+/** Responsive 16:9 Google Drive preview with a click-to-play cover; Drive link always available as fallback. */
+function DemoPlayer() {
+  const [playing, setPlaying] = useState(false);
+  return (
+    <figure className="m-0">
+      <div className="relative aspect-video w-full overflow-hidden border border-sage/30 bg-ink-soft">
+        {playing ? (
+          <iframe
+            src={demoVideo.embedUrl}
+            title={demoVideo.name}
+            className="absolute inset-0 h-full w-full"
+            allow="autoplay; fullscreen"
+            allowFullScreen
+          />
+        ) : (
+          <button
+            type="button"
+            onClick={() => setPlaying(true)}
+            aria-label={`Play video: ${demoVideo.name}`}
+            className="group absolute inset-0 flex flex-col items-center justify-center gap-5 text-ivory focus-visible:outline focus-visible:outline-2 focus-visible:outline-sage"
+          >
+            <span className="flex h-16 w-16 items-center justify-center rounded-full border border-sage/70 text-sage transition-colors group-hover:border-ivory group-hover:bg-ivory group-hover:text-ink md:h-20 md:w-20">
+              <Play size={26} aria-hidden className="translate-x-[2px]" />
+            </span>
+            <span className="px-6 text-center font-serif text-2xl leading-tight md:text-3xl">{demoVideo.name}</span>
+            <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-ivory/55">Play walkthrough</span>
+          </button>
+        )}
+      </div>
+      <figcaption className="mt-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <span className="min-w-0 text-sm text-ivory/65">{demoVideo.caption}</span>
+        <a
+          href={demoVideo.driveUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Open video in Google Drive (opens in a new tab)"
+          className="group inline-flex shrink-0 items-center gap-2 self-start border border-ivory/30 px-5 py-3 font-mono text-xs uppercase tracking-[0.18em] text-ivory transition-colors hover:border-sage hover:text-sage sm:self-auto"
+        >
+          Open Video in Google Drive <ArrowUpRight size={14} aria-hidden />
+        </a>
+      </figcaption>
+    </figure>
   );
 }
 
@@ -363,6 +409,20 @@ export default function Project() {
               </div>
             </Sub>
           </Section>
+
+          {/* Demo video (unnumbered, after 04) */}
+          <section id="demo" tabIndex={-1} aria-labelledby="demo-h" data-demo-video className="scroll-mt-32 border-t border-ivory/10 py-14 outline-none md:py-20">
+            <Reveal>
+              <div className="mb-8 grid gap-4 md:grid-cols-12 md:items-end">
+                <div className="min-w-0 md:col-span-7">
+                  <p className="label text-sage">Demonstration · {demoVideo.name}</p>
+                  <h2 id="demo-h" className="mt-3 font-serif text-4xl leading-[0.95] md:text-5xl">{demoVideo.title}</h2>
+                </div>
+                <p className="min-w-0 max-w-[52ch] leading-relaxed text-ivory/75 md:col-span-5">{demoVideo.subtitle}</p>
+              </div>
+              <DemoPlayer />
+            </Reveal>
+          </section>
 
           {/* 05 */}
           <Section id="stack" num="05" title="Complete tech stack">
