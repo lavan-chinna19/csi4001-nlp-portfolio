@@ -5,7 +5,10 @@ import { about } from './about';
  * Global site settings. Edit here; every page reads from this file.
  */
 export const site = {
-  title: 'Beyond Words',
+  /** Website identity / brand (the owner). The course stays as academic context in `course`. */
+  title: 'Lavan Kumar',
+  /** Full document title used for the home tab and Open Graph. */
+  brandTitle: 'Lavan Kumar – NLP Portfolio',
   subtitle: 'An Exploration of Natural Language Processing and Computational Linguistics.',
   name: 'Lavan Kumar',
   registrationNumber: '23MID0108',
@@ -48,27 +51,27 @@ export const nav = [
 /** Per-route document titles + descriptions (applied by usePageMeta). */
 export const pageMeta: Record<string, { title: string; description: string }> = {
   '/': {
-    title: 'Beyond Words — CSI4001 NLP Portfolio · Lavan Kumar',
-    description: 'An interactive academic portfolio for CSI4001 Natural Language Processing and Computational Linguistics.',
+    title: 'Lavan Kumar – NLP Portfolio',
+    description: 'Lavan Kumar’s NLP portfolio: an interactive academic portfolio for CSI4001 Natural Language Processing and Computational Linguistics.',
   },
   '/about': {
-    title: 'About Me — Beyond Words',
+    title: 'About Me — Lavan Kumar – NLP Portfolio',
     description: 'Lavan Kumar, Data Science student at VIT Vellore: background, interests and tools.',
   },
   '/project': {
-    title: 'My Project: LexAudit — Beyond Words',
+    title: 'My Project: LexAudit — Lavan Kumar – NLP Portfolio',
     description: 'Case file: LexAudit, a local legal-NLP research application that audits contract coherence clause by clause.',
   },
   '/learning': {
-    title: 'My Learning: CSI4001 Notebook — Beyond Words',
+    title: 'My Learning: CSI4001 Notebook — Lavan Kumar – NLP Portfolio',
     description: 'How my understanding of language changed: eight CSI4001 modules explained simply and technically, with working in-browser NLP demos.',
   },
   '/exhibits': {
-    title: 'Projects That Made Me Think — Beyond Words',
+    title: 'Projects That Made Me Think — Lavan Kumar – NLP Portfolio',
     description: 'Six NLP projects from my CSI4001 class: my own project, LexAudit, and five classmates’ projects I explored, each with one NLP lesson.',
   },
   '/contributions': {
-    title: 'Classroom Contributions: Beyond the Classroom — Beyond Words',
+    title: 'Classroom Contributions: Beyond the Classroom — Lavan Kumar – NLP Portfolio',
     description: 'A record of the stars and recognition received in CSI4001 NLP classes for participation, answering questions, presentations and other contributions.',
   },
 };
